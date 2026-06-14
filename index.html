@@ -294,7 +294,7 @@
       .sponsor-logo-item.primary img { height:80px; }
       .sponsor-logo-item.secondary img { height:55px; }
       #team { padding:0; height:100svh; display:flex; flex-direction:column; justify-content:center; }
-      .team-card { width:80vw; }
+      .team-card { width:65vw; }
       .team-ticker { gap:1rem; }
       .f-grid { grid-template-columns:1fr; text-align:left; gap:1.5rem; }
       .f-socials { justify-content:flex-start; }
@@ -685,7 +685,7 @@
     ticker.innerHTML += ticker.innerHTML;
 
     var pos = 0;
-    var speed = window.innerWidth <= 768 ? 0.5 : 1.2;
+    var speed = window.innerWidth <= 768 ? 1.0 : 0.7;
     var halfW = ticker.scrollWidth / 2;
     var dragging = false;
     var dragStartX = 0;
