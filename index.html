@@ -725,18 +725,28 @@
     });
 
     // TOUCH drag (mobile)
+    var touchStartY = 0;
+    var isHorizontal = false;
     ticker.addEventListener('touchstart', function(e) {
+      dragStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      dragStartPos = pos;
+      isHorizontal = false;
       dragging = true; autoPlay = false;
-      dragStartX = e.touches[0].clientX; dragStartPos = pos;
-    }, { passive: true });
+    }, { passive: false });
     ticker.addEventListener('touchmove', function(e) {
       if (!dragging) return;
+      var dx = Math.abs(e.touches[0].clientX - dragStartX);
+      var dy = Math.abs(e.touches[0].clientY - touchStartY);
+      if (!isHorizontal && dy > dx) { dragging = false; autoPlay = true; return; }
+      isHorizontal = true;
+      e.preventDefault();
       var delta = dragStartX - e.touches[0].clientX;
       pos = dragStartPos + delta;
       if (pos < 0) pos += halfW;
       if (pos >= halfW) pos -= halfW;
       ticker.style.transform = 'translateX(' + (-pos) + 'px)';
-    }, { passive: true });
+    }, { passive: false });
     ticker.addEventListener('touchend', function() {
       dragging = false; autoPlay = true;
     });
