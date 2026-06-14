@@ -11,10 +11,12 @@
       --accent:#2ecfcf; --accent2:#5de0e0;
       --text:#e8eaf0; --muted:#6a7080;
       --border:rgba(46,207,207,0.15); --card:rgba(20,20,20,0.9);
+      --header-font: 'Barlow Condensed';
+      --content-font: 'Inter';
     }
     * { margin:0; padding:0; box-sizing:border-box; }
     html { scroll-behavior:smooth; }
-    body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; }
+    body { font-family:var(--content-font),sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; }
 
     /* NAV */
     nav {
@@ -84,7 +86,7 @@
       text-transform:uppercase; color:var(--accent); margin-bottom:0.75rem;
     }
     .section-title {
-      font-family:'Barlow Condensed',sans-serif;
+      font-family:var(--header-font),sans-serif;
       font-size:clamp(2.2rem,4vw,3.2rem); font-weight:800;
       line-height:1.05; margin-bottom:1.2rem;
     }
@@ -120,7 +122,7 @@
       border-radius:20px; padding:0.2rem 0.75rem; margin-bottom:1rem;
     }
     .about-goal-card h3 {
-      font-family:'Barlow Condensed',sans-serif; font-size:1.4rem;
+      font-family:var(--header-font),sans-serif; font-size:1.4rem;
       font-weight:700; margin-bottom:0.6rem; color:var(--text);
     }
     .about-goal-card p { font-size:0.9rem; color:var(--muted); line-height:1.7; }
@@ -174,7 +176,7 @@
       backdrop-filter:blur(6px);
     }
     .team-card h4 {
-      font-family:'Barlow Condensed',sans-serif; font-size:1.1rem;
+      font-family:var(--header-font),sans-serif; font-size:1.1rem;
       font-weight:700; color:var(--text); letter-spacing:0.02em;
       text-transform:uppercase; margin-bottom:0.5rem; line-height:1.2;
     }
@@ -215,7 +217,7 @@
     .contact-card {
       background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:1.5rem 2rem;
     }
-    .contact-card h3 { font-family:'Barlow Condensed',sans-serif; font-size:1.1rem; font-weight:700; margin-bottom:0.3rem; color:var(--text); }
+    .contact-card h3 { font-family:var(--header-font),sans-serif; font-size:1.1rem; font-weight:700; margin-bottom:0.3rem; color:var(--text); }
     .contact-card a { color:var(--accent); text-decoration:none; font-size:0.9rem; font-weight:500; }
     .contact-card a:hover { text-decoration:underline; }
 
@@ -601,7 +603,7 @@
   <!-- MOBILE FOOTER ACCORDION -->
   <div class="f-mobile">
     <div class="f-mobile-logo">
-      <a href="#"><img src="Main.svg" alt="Argentum"/></a>
+      <a href="#"><img src="/static/img/logo.svg" alt="Argentum"/></a>
     </div>
 
     <!-- Contact -->
