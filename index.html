@@ -229,7 +229,7 @@
       align-items:center;
     }
     .f-logo { display:flex; align-items:center; }
-    .f-logo img { height:400px; width:auto; mix-blend-mode:lighten; display:block; }
+    .f-logo img { height:150px; width:auto; mix-blend-mode:lighten; display:block; }
     .f-contact { text-align:center; }
     .f-col h5 { font-size:0.82rem; font-weight:600; color:#fff; margin-bottom:1rem; letter-spacing:0.01em; }
     .f-col .f-name { display:block; color:#fff; font-size:0.88rem; font-weight:600; margin-bottom:0.2rem; }
@@ -317,7 +317,6 @@
   <div class="container">
     <div class="team-intro reveal">
       <h2 class="section-title" id="team-heading">Members</h2>
-      <p class="section-body">10 students from USN across mechanical, electronics, software and operations</p>
     </div>
   </div>
 
@@ -558,7 +557,7 @@
       links.removeAttribute('style');
       links.setAttribute('data-open', 'false');
     } else {
-      links.style.cssText = 'display:flex;flex-direction:column;position:fixed;top:68px;left:0;right:0;background:rgba(8,8,8,0.97);padding:2rem;gap:1.5rem;border-bottom:1px solid rgba(46,207,207,0.15);z-index:99;';
+      links.style.cssText = 'display:flex;flex-direction:column;position:fixed;top:68px;left:0;right:0;background:rgba(8,8,8,0.15);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:2rem;gap:1.5rem;border-bottom:1px solid rgba(46,207,207,0.15);z-index:99;';
       links.setAttribute('data-open', 'true');
     }
   }
