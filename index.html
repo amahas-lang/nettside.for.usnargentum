@@ -7,17 +7,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg:     #080808;
-      --bg2:    #0d0d0d;
-      --bg3:    #141414;
-      --accent: #2ecfcf;
-      --accent2:#5de0e0;
-      --text:   #e8eaf0;
-      --muted:  #6a7080;
-      --border: rgba(46,207,207,0.15);
-      --card:   rgba(20,20,20,0.9);
+      --bg:#080808; --bg2:#0d0d0d; --bg3:#141414;
+      --accent:#2ecfcf; --accent2:#5de0e0;
+      --text:#e8eaf0; --muted:#6a7080;
+      --border:rgba(46,207,207,0.15); --card:rgba(20,20,20,0.9);
     }
-
     * { margin:0; padding:0; box-sizing:border-box; }
     html { scroll-behavior:smooth; }
     body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; }
@@ -27,53 +21,34 @@
       position:fixed; top:0; left:0; right:0; z-index:100;
       display:flex; align-items:center; justify-content:space-between;
       padding:0 2.5rem; height:68px;
-      background:rgba(8,8,8,0.92);
-      backdrop-filter:blur(14px);
+      background:rgba(8,8,8,0.92); backdrop-filter:blur(14px);
       border-bottom:1px solid var(--border);
     }
-    .nav-logo {
-      text-decoration:none;
-      display:flex; align-items:center;
-      line-height:1;
-    }
+    .nav-logo { text-decoration:none; display:flex; align-items:center; line-height:1; }
     .nav-links { display:flex; gap:2rem; list-style:none; }
     .nav-links a {
       color:var(--muted); text-decoration:none; font-size:0.9rem;
-      font-weight:500; letter-spacing:0.04em; text-transform:uppercase;
-      transition:color 0.2s;
+      font-weight:500; letter-spacing:0.04em; text-transform:uppercase; transition:color 0.2s;
     }
     .nav-links a:hover { color:var(--accent); }
-    .nav-cta {
-      background:var(--accent); color:#000;
-      padding:0.45rem 1.2rem; border-radius:4px;
-      font-size:0.85rem; font-weight:700; text-decoration:none;
-      letter-spacing:0.06em; text-transform:uppercase;
-      transition:background 0.2s;
-    }
-    .nav-cta:hover { background:var(--accent2); }
     .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
     .hamburger span { width:24px; height:2px; background:var(--text); display:block; }
 
     /* HERO */
     #hero {
-      min-height:100vh;
+      min-height:100vh; min-height:100svh;
       display:flex; flex-direction:column; justify-content:center; align-items:center;
       position:relative; overflow:hidden;
-      padding:100px 2.5rem 60px;
-      text-align:center;
+      padding:100px 2.5rem 60px; text-align:center;
     }
     .hero-bg {
-      position:absolute; inset:0;
-      /* HERO BACKGROUND IMAGE 2: Replace "hero-bg.jpg" with your background image filename */
-      background-image: url('Image (4).jpg');
-      background-size: cover;
-      background-position: center center;
-      background-attachment: scroll;
-      background-repeat: no-repeat;
+      position:absolute; top:0; left:0; width:100%; height:100%;
+      background-image:url('daniel-leone-g30P1zcOzXo-unsplash.jpg');
+      background-size:cover; background-position:center center;
+      background-attachment:scroll; background-repeat:no-repeat;
     }
     .hero-bg::after {
-      content:'';
-      position:absolute; inset:0;
+      content:''; position:absolute; inset:0;
       background:
         radial-gradient(ellipse 80% 60% at 50% 40%, rgba(46,207,207,0.06) 0%, transparent 70%),
         linear-gradient(180deg, rgba(8,8,8,0.5) 0%, rgba(8,8,8,0.6) 100%);
@@ -85,25 +60,16 @@
         linear-gradient(90deg, rgba(46,207,207,0.15) 1px, transparent 1px);
       background-size:60px 60px;
     }
-    .hero-content { position:relative; max-width:760px; }
-    .hero-title {
-      font-family:'Barlow Condensed',sans-serif;
-      font-size:clamp(3.5rem,8vw,7rem);
-      font-weight:800; line-height:0.92;
-      letter-spacing:-0.01em; margin-bottom:2.5rem;
-    }
-    .hero-title .line1 { display:block; color:var(--text); }
-    .hero-title .line2 { display:block; color:var(--accent); }
+    .hero-content { position:relative; z-index:2; max-width:760px; display:flex; flex-direction:column; align-items:center; }
+    .hero-logo { width:320px; max-width:80vw; height:auto; mix-blend-mode:lighten; }
 
     /* SECTIONS */
     section { padding:6rem 2.5rem; }
     .btn-primary {
-      display:inline-block;
-      background:var(--accent); color:#080808;
-      padding:0.75rem 2rem; border-radius:4px;
-      font-weight:700; text-decoration:none; font-size:0.9rem;
-      letter-spacing:0.06em; text-transform:uppercase;
-      transition:background 0.2s, transform 0.2s;
+      display:inline-block; background:var(--accent); color:#080808;
+      padding:0.75rem 2rem; border-radius:4px; font-weight:700;
+      text-decoration:none; font-size:0.9rem; letter-spacing:0.06em;
+      text-transform:uppercase; transition:background 0.2s, transform 0.2s;
     }
     .btn-primary:hover { background:var(--accent2); transform:translateY(-2px); }
     .section-label {
@@ -118,174 +84,175 @@
     .section-body { color:var(--muted); line-height:1.8; max-width:620px; font-size:1rem; }
     .container { max-width:1200px; margin:0 auto; }
 
-    /* ABOUT (merged with competition) */
+    /* ABOUT */
     #about { background:var(--bg2); }
-    .about-grid {
-      display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:start;
+    .about-center {
+      max-width:780px; margin:0 auto; text-align:center;
     }
-    .about-text .section-body { max-width:100%; }
-    .about-details { margin-top:2rem; display:flex; flex-direction:column; gap:0; }
-    .about-detail-item {
-      padding:0.9rem 0; border-bottom:1px solid var(--border);
-      font-size:0.92rem; color:var(--muted); line-height:1.6;
+    .about-center .section-label { display:block; }
+    .about-center .section-title { margin-bottom:1.5rem; }
+    .about-center .section-body {
+      max-width:100%; margin:0 auto 3rem;
+      font-size:1.05rem; line-height:1.85;
     }
-    .about-detail-item:last-child { border-bottom:none; }
-    .about-detail-label {
-      display:block; font-size:0.7rem; font-weight:700;
-      letter-spacing:0.1em; text-transform:uppercase;
-      color:var(--text); margin-bottom:0.2rem;
+    .about-goals {
+      display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;
+      margin-top:2rem; text-align:left;
     }
-    .rover-3d-link { text-decoration:none; display:block; }
-    .rover-3d-card {
-      border:1px solid var(--border); border-radius:8px; background:var(--bg3);
-      transition:border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    .about-goal-card {
+      background:var(--bg3); border:1px solid var(--border);
+      border-radius:8px; padding:2rem;
     }
-    .rover-3d-link:hover .rover-3d-card {
-      border-color:var(--accent); transform:translateY(-3px);
-      box-shadow:0 8px 24px rgba(46,207,207,0.1);
+    .about-goal-tag {
+      display:inline-block; font-size:0.68rem; font-weight:700;
+      letter-spacing:0.12em; text-transform:uppercase;
+      color:var(--accent); border:1px solid var(--border);
+      border-radius:20px; padding:0.2rem 0.75rem; margin-bottom:1rem;
     }
-    .rover-3d-card-inner { display:flex; align-items:center; gap:1.2rem; padding:1.8rem; }
-    .rover-3d-icon { flex-shrink:0; }
-    .rover-3d-card-text { flex:1; }
-    .rover-3d-card-title {
-      display:block; font-family:'Barlow Condensed',sans-serif;
-      font-size:1.2rem; font-weight:700; color:var(--text); margin-bottom:0.2rem;
+    .about-goal-card h3 {
+      font-family:'Barlow Condensed',sans-serif; font-size:1.4rem;
+      font-weight:700; margin-bottom:0.6rem; color:var(--text);
     }
-    .rover-3d-card-sub { display:block; font-size:0.82rem; color:var(--muted); }
-    .rover-3d-card-arrow { font-size:1.2rem; color:var(--accent); transition:transform 0.2s; }
-    .rover-3d-link:hover .rover-3d-card-arrow { transform:translateX(4px); }
+    .about-goal-card p { font-size:0.9rem; color:var(--muted); line-height:1.7; }
+    @media(max-width:600px) { .about-goals { grid-template-columns:1fr; } }
 
     /* TEAM */
-    #team { background:var(--bg2); }
-    .team-grid {
-      display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-      gap:1.5rem; margin-top:3rem;
+    #team { background:var(--bg2); overflow:hidden; }
+    .team-intro { margin-bottom:3rem; text-align:center; }
+
+    /* SCROLLING TICKER */
+    .team-ticker-wrap {
+      width:100%; overflow:hidden;
+      -webkit-mask-image:linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+      mask-image:linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+    }
+    .team-ticker {
+      display:flex; gap:1.5rem;
+      width:max-content;
+      animation:tickerScroll 35s linear infinite;
+    }
+    .team-ticker:hover { animation-play-state:paused; }
+    @keyframes tickerScroll {
+      0%   { transform:translateX(0); }
+      100% { transform:translateX(-50%); }
     }
     .team-card {
-      background:var(--bg3); border:1px solid var(--border); border-radius:8px;
-      padding:1.8rem 1.5rem; transition:border-color 0.2s, transform 0.2s;
+      flex-shrink:0; width:220px;
+      background:transparent;
+      text-align:left;
     }
-    .team-card:hover { border-color:var(--accent); transform:translateY(-4px); }
-    .team-card-role {
-      font-size:0.7rem; font-weight:700; letter-spacing:0.12em;
-      text-transform:uppercase; color:var(--accent); margin-bottom:0.5rem;
+    .team-card-photo {
+      width:100%; aspect-ratio:3/4; border-radius:12px;
+      background:var(--bg3); border:1px solid var(--border);
+      overflow:hidden; position:relative;
+      margin-bottom:0.9rem;
+    }
+    .team-card-photo img { width:100%; height:100%; object-fit:cover; display:block; }
+    .team-card-photo .photo-placeholder {
+      width:100%; height:100%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:0.65rem; color:var(--muted); text-align:center;
+      letter-spacing:0.06em; text-transform:uppercase;
+    }
+    .team-card-role-badge {
+      position:absolute; top:0.75rem; left:0.75rem;
+      background:rgba(10,10,10,0.82);
+      color:var(--text); font-size:0.62rem; font-weight:700;
+      letter-spacing:0.1em; text-transform:uppercase;
+      padding:0.3rem 0.7rem; border-radius:20px;
+      backdrop-filter:blur(6px);
     }
     .team-card h4 {
-      font-family:'Barlow Condensed',sans-serif; font-size:1.25rem;
-      font-weight:700; margin-bottom:0.3rem; color:var(--text);
+      font-family:'Barlow Condensed',sans-serif; font-size:1.1rem;
+      font-weight:700; color:var(--text); letter-spacing:0.02em;
+      text-transform:uppercase; margin-bottom:0.5rem; line-height:1.2;
     }
-    .team-card-faculty { font-size:0.8rem; color:var(--muted); }
+    .team-card-icons {
+      display:flex; gap:0.5rem; align-items:center;
+    }
+    .team-card-icon-btn {
+      width:32px; height:32px; border-radius:50%;
+      background:var(--bg); border:none;
+      display:inline-flex; align-items:center; justify-content:center;
+      text-decoration:none; transition:background 0.2s;
+      flex-shrink:0;
+    }
+    .team-card-icon-btn:hover { background:var(--bg3); }
+    .team-card-icon-btn svg { width:15px; height:15px; fill:var(--text); }
 
     /* SPONSORS */
     #sponsors { background:var(--bg); }
-    .sponsor-placeholder {
-      display:flex; flex-wrap:wrap; gap:1.5rem; justify-content:center; margin-top:3rem;
+    .sponsors-center { max-width:700px; margin:0 auto; text-align:center; }
+    .sponsor-logos {
+      display:flex; flex-wrap:wrap; align-items:center;
+      justify-content:center; gap:4rem; margin-top:2.5rem;
     }
-    .sponsor-slot {
-      width:160px; height:80px;
-      border:1px dashed rgba(46,207,207,0.25); border-radius:6px;
-      display:flex; align-items:center; justify-content:center;
-      color:rgba(46,207,207,0.3); font-size:0.75rem;
-      letter-spacing:0.1em; text-transform:uppercase;
-    }
-    .sponsor-slot.usn {
-      border-style:solid; border-color:var(--border);
-      background:rgba(46,207,207,0.05); color:var(--accent); font-weight:700;
-    }
-    .sponsor-note {
-      background:var(--bg3); border:1px solid var(--border); border-radius:8px;
-      padding:3rem; text-align:center; margin-top:3rem;
-    }
-    .sponsor-note h3 { font-family:'Barlow Condensed',sans-serif; font-size:2rem; font-weight:700; margin-bottom:1rem; }
-    .sponsor-note p { color:var(--muted); max-width:500px; margin:0 auto 2rem; line-height:1.7; }
+    .sponsor-logo-item { display:flex; align-items:center; justify-content:center; }
+    .sponsor-logo-item img { height:60px; width:auto; filter:brightness(0) invert(1); opacity:0.85; transition:opacity 0.2s; }
+    .sponsor-logo-item img:hover { opacity:1; }
 
     /* CONTACT */
     #contact { background:var(--bg2); }
-    .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-top:3rem; }
+    .contact-center { max-width:500px; margin:0 auto; text-align:center; }
+    .contact-stack { display:flex; flex-direction:column; gap:1rem; margin-top:2rem; text-align:left; }
     .contact-card {
-      background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:2rem;
+      background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:1.5rem 2rem;
     }
-    .contact-card h3 { font-family:'Barlow Condensed',sans-serif; font-size:1.3rem; font-weight:700; margin-bottom:0.5rem; }
-    .contact-card p { color:var(--muted); font-size:0.9rem; line-height:1.6; margin-bottom:1rem; }
+    .contact-card h3 { font-family:'Barlow Condensed',sans-serif; font-size:1.1rem; font-weight:700; margin-bottom:0.3rem; color:var(--text); }
     .contact-card a { color:var(--accent); text-decoration:none; font-size:0.9rem; font-weight:500; }
     .contact-card a:hover { text-decoration:underline; }
 
     /* FOOTER */
-    footer { background:var(--bg); border-top:1px solid var(--border); padding:4rem 2.5rem 2rem; }
-    .footer-grid {
-      display:grid; grid-template-columns:2fr 1fr 1fr 1fr;
-      gap:3rem; max-width:1200px; margin:0 auto;
-      padding-bottom:3rem; border-bottom:1px solid var(--border);
+    footer { background:#0b0c11; padding:3.5rem 3rem 2rem; }
+    .f-wrap { max-width:1200px; margin:0 auto; }
+    .f-grid {
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:2rem;
+      padding-bottom:2.5rem;
+      border-bottom:1px solid rgba(255,255,255,0.07);
+      align-items:center;
     }
-    .footer-brand p { color:var(--muted); font-size:0.9rem; line-height:1.6; }
-    .footer-brand .brand-name {
-      font-family:'Barlow Condensed',sans-serif; font-size:1.4rem; font-weight:800;
-      color:var(--accent); display:block; margin-bottom:0.75rem; text-decoration:none;
+    .f-logo { display:flex; align-items:center; }
+    .f-logo img { height:64px; width:auto; mix-blend-mode:lighten; display:block; }
+    .f-contact { text-align:center; }
+    .f-col h5 { font-size:0.82rem; font-weight:600; color:#fff; margin-bottom:1rem; letter-spacing:0.01em; }
+    .f-col .f-name { display:block; color:#fff; font-size:0.88rem; font-weight:600; margin-bottom:0.2rem; }
+    .f-col .f-role { display:block; color:rgba(255,255,255,0.4); font-size:0.78rem; margin-bottom:0.6rem; }
+    .f-col .f-phone { display:block; color:rgba(255,255,255,0.5); font-size:0.82rem; text-decoration:none; transition:color 0.2s; }
+    .f-col .f-phone:hover { color:#fff; }
+    .f-socials-col { display:flex; flex-direction:column; align-items:flex-end; gap:1rem; }
+    .f-socials { display:flex; align-items:center; justify-content:flex-end; gap:1.2rem; }
+    .f-socials a { display:inline-flex; align-items:center; justify-content:center; text-decoration:none; opacity:0.6; transition:opacity 0.2s; }
+    .f-socials a:hover { opacity:1; }
+    .f-socials svg { width:24px; height:24px; fill:#fff; }
+    .f-org-info { text-align:right; }
+    .f-org-label { display:block; color:rgba(255,255,255,0.25); font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.15rem; }
+    .f-org-value { display:block; color:rgba(255,255,255,0.45); font-size:0.8rem; line-height:1.6; }
+    .f-bottom { display:flex; justify-content:flex-start; padding-top:1.5rem; }
+    .f-bottom p { color:rgba(255,255,255,0.22); font-size:0.76rem; }
+    @media(max-width:600px) {
+      .f-grid { grid-template-columns:1fr; text-align:left; }
+      .f-socials { justify-content:flex-start; }
+      footer { padding:2.5rem 1.5rem 1.5rem; }
     }
-    .footer-brand .brand-name span { color:var(--text); }
-    .footer-social { display:flex; gap:0.75rem; margin-top:1.2rem; }
-    .social-btn {
-      width:36px; height:36px; background:var(--bg3); border:1px solid var(--border);
-      border-radius:6px; display:flex; align-items:center; justify-content:center;
-      text-decoration:none; font-size:0.9rem; color:var(--muted);
-      transition:border-color 0.2s, background 0.2s;
-    }
-    .social-btn:hover { border-color:var(--accent); background:rgba(46,207,207,0.1); color:var(--accent); }
-    .footer-col h4 { font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text); margin-bottom:1rem; }
-    .footer-col ul { list-style:none; }
-    .footer-col ul li { margin-bottom:0.6rem; }
-    .footer-col ul li a { color:var(--muted); text-decoration:none; font-size:0.9rem; transition:color 0.2s; }
-    .footer-col ul li a:hover { color:var(--accent); }
-    .footer-bottom {
-      display:flex; justify-content:space-between; align-items:center;
-      padding-top:2rem; max-width:1200px; margin:0 auto; flex-wrap:wrap; gap:1rem;
-    }
-    .footer-bottom p { color:var(--muted); font-size:0.85rem; }
 
     /* MOBILE */
     @media (max-width:768px) {
       nav { padding:0 1.5rem; }
       .nav-links { display:none; }
-      .nav-cta { display:none; }
       .hamburger { display:flex; }
       section { padding:4rem 1.5rem; }
       .about-grid { grid-template-columns:1fr; gap:2.5rem; }
-      .comp-card { grid-template-columns:1fr; }
       .contact-grid { grid-template-columns:1fr; }
       .footer-grid { grid-template-columns:1fr 1fr; }
+      .hero-logo { width:240px; }
     }
 
-    /* SCROLL REVEAL - visible by default, animated as enhancement */
-    .reveal {
-      opacity:1;
-      transform:none;
-      transition:opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1);
-    }
-    .reveal-stagger > * {
-      opacity:1;
-      transform:none;
-      transition:opacity 0.6s cubic-bezier(0.22,1,0.36,1), transform 0.6s cubic-bezier(0.22,1,0.36,1);
-    }
-    /* js-ready class added by script before observer fires */
-    .js-ready .reveal {
-      opacity:0;
-      transform:translateY(32px);
-    }
-    .js-ready .reveal.visible {
-      opacity:1;
-      transform:none;
-    }
-    .js-ready .reveal-stagger > * {
-      opacity:0;
-      transform:translateY(24px);
-    }
-    .js-ready .reveal-stagger.visible > *:nth-child(1) { opacity:1; transform:none; transition-delay:0s; }
-    .js-ready .reveal-stagger.visible > *:nth-child(2) { opacity:1; transform:none; transition-delay:0.1s; }
-    .js-ready .reveal-stagger.visible > *:nth-child(3) { opacity:1; transform:none; transition-delay:0.2s; }
-    .js-ready .reveal-stagger.visible > *:nth-child(4) { opacity:1; transform:none; transition-delay:0.3s; }
-    .js-ready .reveal-stagger.visible > *:nth-child(5) { opacity:1; transform:none; transition-delay:0.4s; }
-    .js-ready .reveal-stagger.visible > *:nth-child(6) { opacity:1; transform:none; transition-delay:0.5s; }
-    .js-ready .reveal-stagger.visible > *:nth-child(7) { opacity:1; transform:none; transition-delay:0.6s; }
+    /* SCROLL REVEAL */
+    .reveal { opacity:1; transform:none; transition:opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1); }
+    .js-ready .reveal { opacity:0; transform:translateY(32px); }
+    .js-ready .reveal.visible { opacity:1; transform:none; }
   </style>
 </head>
 <body>
@@ -293,17 +260,15 @@
 <!-- NAV -->
 <nav>
   <a href="#" class="nav-logo">
-    <!-- LOGO IMAGE 1: Replace "logo.jpg" with your logo filename -->
-    <img src="USN-3.svg" alt="" style="height:55px;width:200px;object-fit:cover;object-position:center;mix-blend-mode:lighten;display:block;"/>
+    <img src="Main.svg" alt="" style="height:40px;width:auto;mix-blend-mode:lighten;display:block;"/>
   </a>
   <ul class="nav-links">
+    <li><a href="#hero">Home</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#team">Team</a></li>
-    <li><a href="#sponsors">Sponsors</a></li>
-    <li><a href="rover-3d.html">Rover 3D View</a></li>
-    <li><a href="#contact">Contact</a></li>
+    <li><a href="rover-3d.html">Rover</a></li>
+    <li><a href="#about">Blog</a></li>
   </ul>
-  <a href="#contact" class="nav-cta">Support Us</a>
   <div class="hamburger" onclick="toggleMenu()">
     <span></span><span></span><span></span>
   </div>
@@ -314,65 +279,22 @@
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-content">
-    <h1 class="hero-title">
-      <span class="line1">Autonomous</span>
-      <span class="line2">Rescue Rover</span>
-    </h1>
+    <img src="Main.svg" alt="Argentum" class="hero-logo"/>
   </div>
 </section>
 
 <!-- ABOUT -->
 <section id="about">
   <div class="container">
-    <div class="about-grid reveal">
-      <div class="about-text">
-        <p class="section-label">About Us</p>
-        <h2 class="section-title">Building a Rescue Rover from the Ground Up</h2>
-        <p class="section-body">
-          USN Argentum is a student team at the University of South-Eastern Norway designing and building a fully autonomous rover to compete in RoboCup Rescue 2026.
-        </p>
-        <div class="about-details">
-          <div class="about-detail-item">
-            <span class="about-detail-label">Competition</span>
-            RoboCup Rescue 2026; international autonomous robotics, disaster terrain navigation and victim detection without human control
-          </div>
-          <div class="about-detail-item">
-            <span class="about-detail-label">Navigation</span>
-            Autonomous SLAM based mapping and navigation in unstructured environments
-          </div>
-          <div class="about-detail-item">
-            <span class="about-detail-label">Technology</span>
-            ROS, embedded systems, computer vision for victim detection and a custom mechanical platform
-          </div>
-          <div class="about-detail-item">
-            <span class="about-detail-label">Team</span>
-            7 students across mechanical engineering, computer engineering and economics
-          </div>
-        </div>
-      </div>
-      <div>
-        <a href="rover-3d.html" class="rover-3d-link">
-          <div class="rover-3d-card">
-            <div class="rover-3d-card-inner">
-              <div class="rover-3d-icon">
-                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="6" y="26" width="32" height="8" rx="4" stroke="#2ecfcf" stroke-width="1.5" fill="rgba(46,207,207,0.08)"/>
-                  <rect x="12" y="17" width="20" height="11" rx="3" stroke="#2ecfcf" stroke-width="1.5" fill="rgba(46,207,207,0.06)"/>
-                  <circle cx="13" cy="26" r="4" stroke="#2ecfcf" stroke-width="1.5" fill="rgba(46,207,207,0.1)"/>
-                  <circle cx="31" cy="26" r="4" stroke="#2ecfcf" stroke-width="1.5" fill="rgba(46,207,207,0.1)"/>
-                  <line x1="24" y1="17" x2="31" y2="8" stroke="#2ecfcf" stroke-width="1.8" stroke-linecap="round"/>
-                  <circle cx="32" cy="7" r="2.5" fill="#2ecfcf"/>
-                </svg>
-              </div>
-              <div class="rover-3d-card-text">
-                <span class="rover-3d-card-title">Rover 3D View</span>
-                <span class="rover-3d-card-sub">Interactive model; rotate, zoom, inspect</span>
-              </div>
-              <div class="rover-3d-card-arrow">→</div>
-            </div>
-          </div>
-        </a>
-      </div>
+    <div class="about-center reveal">
+      <p class="section-label">About Us</p>
+      <h2 class="section-title">Where Technology Meets Purpose</h2>
+      <p class="section-body">
+        USN Argentum was founded after USN and Kongsberg initiated a call for a new student organization that would contribute to emerging technology. A competition was held among student groups, and we won. From that moment, we set out to build a fully autonomous rescue rover — a team of 10 students driven by the belief that technology can save lives.
+      </p>
+      <p class="section-body" style="margin-top:1.5rem;">
+        In the short term, our goal is to compete in RoboCup Rescue 2027, one of the world's most demanding autonomous robotics competitions, where rovers must navigate disaster terrain and locate victims without any human control. In the long term, we want to contribute to real technology that can find and rescue people trapped in disaster zones — earthquakes, collapsed buildings, and catastrophic situations where human access is limited.
+      </p>
     </div>
   </div>
 </section>
@@ -380,47 +302,136 @@
 <!-- TEAM -->
 <section id="team">
   <div class="container">
-    <div class="reveal">
+    <div class="team-intro reveal">
       <p class="section-label">The People</p>
       <h2 class="section-title">Meet the Team</h2>
-      <p class="section-body">Seven students from USN across mechanical, software and operations</p>
+      <p class="section-body">10 students from USN across mechanical, electronics, software and operations</p>
     </div>
-    <div class="team-grid reveal-stagger">
+  </div>
+
+  <div class="team-ticker-wrap">
+    <div class="team-ticker" id="teamTicker">
+
       <div class="team-card">
-        <div class="team-card-role">Technical Lead & Robotics</div>
+        <div class="team-card-photo">
+          <img src="photo-nikolai.jpg" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"/>
+          <div class="photo-placeholder" style="display:none;">Photo Coming Soon</div>
+          <span class="team-card-role-badge">Technical Lead</span>
+        </div>
         <h4>Nikolai Fallo</h4>
-        <div class="team-card-faculty">Mechanical Engineering</div>
+        <div class="team-card-icons">
+          <a href="#" class="team-card-icon-btn" title="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+        </div>
       </div>
+
       <div class="team-card">
-        <div class="team-card-role">DriveTrain & Motion</div>
+        <div class="team-card-photo">
+          <img src="photo-tabitha.jpg" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"/>
+          <div class="photo-placeholder" style="display:none;">Photo Coming Soon</div>
+          <span class="team-card-role-badge">Drivetrain & Motion</span>
+        </div>
         <h4>Tabitha Marie Enconado</h4>
-        <div class="team-card-faculty">Mechanical Engineering</div>
+        <div class="team-card-icons">
+          <a href="#" class="team-card-icon-btn" title="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+        </div>
       </div>
+
       <div class="team-card">
-        <div class="team-card-role">Exterior Design</div>
+        <div class="team-card-photo">
+          <img src="photo-henriette.jpg" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"/>
+          <div class="photo-placeholder" style="display:none;">Photo Coming Soon</div>
+          <span class="team-card-role-badge">Exterior Design</span>
+        </div>
         <h4>Henriette Johansen Opsal</h4>
-        <div class="team-card-faculty">Mechanical Engineering</div>
+        <div class="team-card-icons">
+          <a href="#" class="team-card-icon-btn" title="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+        </div>
       </div>
+
       <div class="team-card">
-        <div class="team-card-role">Validation & Test</div>
+        <div class="team-card-photo">
+          <img src="photo-tora.jpg" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"/>
+          <div class="photo-placeholder" style="display:none;">Photo Coming Soon</div>
+          <span class="team-card-role-badge">Validation & Test</span>
+        </div>
         <h4>Tora Dammen</h4>
-        <div class="team-card-faculty">Mechanical Engineering</div>
+        <div class="team-card-icons">
+          <a href="#" class="team-card-icon-btn" title="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+        </div>
       </div>
+
       <div class="team-card">
-        <div class="team-card-role">Software & Autonomy</div>
-        <h4>Amar Abdullahi Hassan </h4>
-        <div class="team-card-faculty">Computer Engineering</div>
+        <div class="team-card-photo">
+          <img src="photo-amar.jpg" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"/>
+          <div class="photo-placeholder" style="display:none;">Photo Coming Soon</div>
+          <span class="team-card-role-badge">Software & Autonomy</span>
+        </div>
+        <h4>Amar Abdullahi Hassan</h4>
+        <div class="team-card-icons">
+          <a href="#" class="team-card-icon-btn" title="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+        </div>
       </div>
+
       <div class="team-card">
-        <div class="team-card-role">Marketing & Economy</div>
+        <div class="team-card-photo">
+          <img src="photo-xhena.jpg" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"/>
+          <div class="photo-placeholder" style="display:none;">Photo Coming Soon</div>
+          <span class="team-card-role-badge">Marketing & Economy</span>
+        </div>
         <h4>Xhena Galim</h4>
-        <div class="team-card-faculty">Economics</div>
+        <div class="team-card-icons">
+          <a href="#" class="team-card-icon-btn" title="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+        </div>
       </div>
+
       <div class="team-card">
-        <div class="team-card-role">Organizational Lead</div>
+        <div class="team-card-photo">
+          <img src="photo-john.jpg" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"/>
+          <div class="photo-placeholder" style="display:none;">Photo Coming Soon</div>
+          <span class="team-card-role-badge">Organizational Lead</span>
+        </div>
         <h4>John Christian Fredriksen</h4>
-        <div class="team-card-faculty">Economics</div>
+        <div class="team-card-icons">
+          <a href="#" class="team-card-icon-btn" title="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+        </div>
       </div>
+
+      <div class="team-card">
+        <div class="team-card-photo">
+          <img src="photo-aleksander.jpg" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"/>
+          <div class="photo-placeholder" style="display:none;">Photo Coming Soon</div>
+          <span class="team-card-role-badge">Electronics Engineer</span>
+        </div>
+        <h4>Aleksander</h4>
+        <div class="team-card-icons">
+          <a href="#" class="team-card-icon-btn" title="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-card-photo">
+          <img src="photo-rami.jpg" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"/>
+          <div class="photo-placeholder" style="display:none;">Photo Coming Soon</div>
+          <span class="team-card-role-badge">Electronics Engineer</span>
+        </div>
+        <h4>Rami</h4>
+        <div class="team-card-icons">
+          <a href="#" class="team-card-icon-btn" title="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-card-photo">
+          <img src="photo-kristoffer.jpg" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"/>
+          <div class="photo-placeholder" style="display:none;">Photo Coming Soon</div>
+          <span class="team-card-role-badge">Software Engineer</span>
+        </div>
+        <h4>Kristoffer</h4>
+        <div class="team-card-icons">
+          <a href="#" class="team-card-icon-btn" title="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -428,31 +439,16 @@
 <!-- SPONSORS -->
 <section id="sponsors">
   <div class="container reveal">
-    <p class="section-label">Support</p>
-    <h2 class="section-title">Sponsors</h2>
-    <div class="sponsor-note">
-      <h3>Become a Sponsor</h3>
-      <p>Your brand on our rover, website and competition materials. Get in touch to discuss partnership opportunities</p>
-      <a href="#contact" class="btn-primary">Get in Touch</a>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact">
-  <div class="container reveal">
-    <p class="section-label">Get In Touch</p>
-    <h2 class="section-title">Contact</h2>
-    <div class="contact-grid">
-      <div class="contact-card">
-        <h3>General</h3>
-        <p>Questions and collaboration</p>
-        <a href="/cdn-cgi/l/email-protection#e784888993868493a7929489869580828993928ac98988"><span class="__cf_email__" data-cfemail="a2c1cdccd6c3c1d6e2d7d1ccc3d0c5c7ccd6d7cf8ccccd">email&#160;</span></a>
-      </div>
-      <div class="contact-card">
-        <h3>Sponsorship</h3>
-        <p>Partnership and funding inquiries</p>
-        <a href="/cdn-cgi/l/email-protection#5526253a3b263a271520263b342732303b2120387b3b3a"><span class="__cf_email__" data-cfemail="6211120d0c110d102217110c031005070c16170f4c0c0d">email&#160;</span></a>
+    <div class="sponsors-center">
+      <p class="section-label">Support</p>
+      <h2 class="section-title">Sponsors</h2>
+      <div class="sponsor-logos">
+        <div class="sponsor-logo-item">
+          <img src="kongsberg-w.svg" alt="Kongsberg"/>
+        </div>
+        <div class="sponsor-logo-item">
+          <img src="USN-logo_hvit_medTekst.png" alt="USN"/>
+        </div>
       </div>
     </div>
   </div>
@@ -460,49 +456,59 @@
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <a href="#" class="brand-name">
-        <!-- LOGO IMAGE 1: Same logo file as nav — replace "Image.jpg" with your logo filename -->
-        <img src="USN-3.svg" alt="" style="height:55px;width:200px;object-fit:cover;object-position:center;mix-blend-mode:lighten;display:block;"/>
-      </a>
-      </a>
+  <div class="f-wrap">
+    <div class="f-grid">
+
+      <!-- LEFT: Logo -->
+      <div class="f-logo">
+        <a href="#"><img src="Main.svg" alt="Argentum"/></a>
+      </div>
+
+      <!-- CENTER: Contact -->
+      <div class="f-col f-contact">
+        <h5>Contact</h5>
+        <span class="f-name">John Christian Fredriksen</span>
+        <span class="f-role">Organizational Lead</span>
+        <a href="mailto:contact@usnargentum.no" class="f-phone">contact@usnargentum.no</a>
+        <a href="tel:+4700000000" class="f-phone">+47 000 00 000</a>
+      </div>
+
+      <!-- RIGHT: Social icons + org info -->
+      <div class="f-socials-col">
+        <div class="f-socials">
+          <a href="#" title="LinkedIn">
+            <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+          <a href="#" title="Instagram">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.334 3.608 1.308.974.974 1.246 2.241 1.308 3.608.058 1.265.069 1.645.069 4.85s-.012 3.584-.07 4.85c-.062 1.366-.334 2.633-1.308 3.608-.974.974-2.241 1.246-3.608 1.308-1.265.058-1.645.069-4.85.069s-3.584-.012-4.85-.07c-1.366-.062-2.633-.334-3.608-1.308-.974-.974-1.246-2.241-1.308-3.608C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.062-1.366.334-2.633 1.308-3.608.974-.974 2.241-1.246 3.608-1.308C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.014 7.052.072 5.197.157 3.355.673 2.014 2.014.673 3.355.157 5.197.072 7.052.014 8.332 0 8.741 0 12c0 3.259.014 3.668.072 4.948.085 1.855.601 3.697 1.942 5.038 1.341 1.341 3.183 1.857 5.038 1.942C8.332 23.986 8.741 24 12 24s3.668-.014 4.948-.072c1.855-.085 3.697-.601 5.038-1.942 1.341-1.341 1.857-3.183 1.942-5.038.058-1.28.072-1.689.072-4.948s-.014-3.668-.072-4.948c-.085-1.855-.601-3.697-1.942-5.038C20.645.673 18.803.157 16.948.072 15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+          </a>
+          <a href="#" title="TikTok">
+            <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
+          </a>
+        </div>
+        <div class="f-org-info">
+          <span class="f-org-label">Org. nr.</span>
+          <span class="f-org-value">000 000 000</span>
+          <span class="f-org-label" style="margin-top:0.6rem;">Address</span>
+          <span class="f-org-value">Bergseminaret v/USN Kongsberg<br/>Hasbergs vei 36<br/>3616 Kongsberg</span>
+        </div>
+      </div>
+
     </div>
-    <div class="footer-col">
-      <h4>Explore</h4>
-      <ul>
-        <li><a href="#about">About</a></li>
-        <li><a href="#team">Team</a></li>
-        <li><a href="#sponsors">Sponsors</a></li>
-        <li><a href="rover-3d.html">Rover 3D View</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Get Involved</h4>
-      <ul>
-        <li><a href="#sponsors">Become a Sponsor</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Contact</h4>
-      <ul>
-        <li><a href="/cdn-cgi/l/email-protection#7d1e1213091c1e093d080e131c0f1a1813090810531312"><span class="__cf_email__" data-cfemail="24474b4a504547506451574a455643414a5051490a4a4b">email&#160;</span></a></li>
-        <li><a href="#">Kongsberg, Norway</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p>© USN Argentum</p>
-    <p style="font-size:0.8rem;">Built for GitHub Pages</p>
   </div>
 </footer>
 
-
 <script>
+  // Duplicate ticker cards for seamless loop
+  var ticker = document.getElementById('teamTicker');
+  if (ticker) {
+    var clone = ticker.innerHTML;
+    ticker.innerHTML += clone;
+  }
+
+  // Scroll reveal
   if ('IntersectionObserver' in window) {
     document.body.classList.add('js-ready');
-    var revealEls = document.querySelectorAll('.reveal, .reveal-stagger');
     var observer = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
         if (entry.isIntersecting) {
@@ -511,30 +517,28 @@
         }
       });
     }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-    revealEls.forEach(function(el) { observer.observe(el); });
+    document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
   }
 
+  // Hamburger
   function toggleMenu() {
     var links = document.querySelector('.nav-links');
-    var cta   = document.querySelector('.nav-cta');
     var isOpen = links.getAttribute('data-open') === 'true';
     if (isOpen) {
       links.removeAttribute('style');
       links.setAttribute('data-open', 'false');
-      if (cta) cta.style.display = '';
     } else {
       links.style.cssText = 'display:flex;flex-direction:column;position:fixed;top:68px;left:0;right:0;background:rgba(8,8,8,0.97);padding:2rem;gap:1.5rem;border-bottom:1px solid rgba(46,207,207,0.15);z-index:99;';
       links.setAttribute('data-open', 'true');
-      if (cta) cta.style.display = 'none';
     }
   }
 
+  // Smooth scroll
   document.querySelectorAll('a[href^="#"]').forEach(function(a) {
     a.addEventListener('click', function(e) {
       var target = document.querySelector(a.getAttribute('href'));
       if (target) {
         e.preventDefault();
-        // close mobile menu if open
         var links = document.querySelector('.nav-links');
         links.removeAttribute('style');
         links.setAttribute('data-open', 'false');
