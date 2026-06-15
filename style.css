@@ -214,7 +214,7 @@ section { padding:6rem 2.5rem; }
 .contact-card a:hover { text-decoration:underline; }
 
 /* FOOTER */
-footer { background:#0b0c11; padding:0.5rem 2.5rem; }
+footer { background:#0b0c11; padding:0.5rem 1.5rem; }
 .f-wrap { max-width:100%; margin:0; }
 .f-grid {
     display:grid;
