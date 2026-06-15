@@ -219,7 +219,7 @@ footer { background:#0b0c11; padding:0.5rem 0.5rem; }
 .f-grid {
     display:grid;
     grid-template-columns:1fr 1fr 1fr;
-    gap:2rem;
+    gap:1rem;
     align-items:center;
 }
 .f-logo { display:flex; align-items:center; }
