@@ -37,7 +37,7 @@ nav.scrolled {
 
 /* HERO */
 #hero {
-    min-height:100svh;
+    min-height:100vh;
     display:flex; flex-direction:column; justify-content:center; align-items:center;
     position:relative; overflow:hidden;
     padding:100px 2.5rem 60px; text-align:center;
