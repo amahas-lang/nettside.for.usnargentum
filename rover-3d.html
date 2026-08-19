@@ -9,6 +9,7 @@
   <link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png"/>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
   <style>
+    * { box-sizing:border-box; }
     :root {
       --bg:#080808;
       --bg2:#0d0d0d;
@@ -573,15 +574,6 @@ function init() {
 
   canvas.addEventListener('touchmove', function(e) {
     e.preventDefault();
-    var ids = Object.keys(touches);
-
-    // Update stored positions
-    for (var i = 0; i < e.changedTouches.length; i++) {
-      var t = e.changedTouches[i];
-      if (touches[t.identifier]) {
-        touches[t.identifier] = {x: t.clientX, y: t.clientY};
-      }
-    }
 
     if (e.touches.length === 3) {
       // ── THREE FINGER PAN ──
