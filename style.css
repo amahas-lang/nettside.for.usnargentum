@@ -8,7 +8,28 @@
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 html { scroll-behavior:smooth; }
-body { font-family:var(--content-font),sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; }
+body {
+    font-family:var(--content-font),sans-serif;
+    background:var(--bg);
+    color:var(--text); overflow-x:hidden; position:relative;
+    display:flex; flex-direction:column; min-height:100vh;
+}
+/* photo layer, on its own animatable pseudo-element (not body's own
+   background) so it can zoom on load the same way the hero's does -- on
+   index.html this sits behind the hero's own fixed layer and is never
+   seen; it only shows through on pages that don't have their own hero */
+body::before {
+    content:''; position:fixed; inset:0; z-index:-3;
+    background:url('/static/img/daniel-leone-g30P1zcOzXo-unsplash.jpg') center center / cover no-repeat;
+    transform:scale(1.4); animation:heroBgZoomOut 4s ease 0.2s forwards;
+    pointer-events:none;
+}
+/* subtle dark tint over the photo so text stays readable */
+body::after {
+    content:''; position:fixed; inset:0; z-index:-2;
+    background:linear-gradient(180deg, rgba(8,8,8,0.6) 0%, rgba(8,8,8,0.75) 100%);
+    pointer-events:none;
+}
 
 /* NAV */
 nav {
@@ -26,12 +47,25 @@ nav.scrolled {
     border-bottom:1px solid rgba(255,255,255,0.03);
 }
 .nav-logo { text-decoration:none; display:flex; align-items:center; line-height:1; }
+.nav-logo img { height:40px; width:auto; display:block; }
 .nav-links { display:flex; gap:2rem; list-style:none; }
 .nav-links a {
     color:rgba(255,255,255,0.7); text-decoration:none; font-size:0.9rem;
     font-weight:500; letter-spacing:0.04em; text-transform:uppercase; transition:color 0.2s;
 }
 .nav-links a:hover { color:#fff; }
+.nav-links a.nav-cta {
+    font-weight:800; padding:0.5rem 1.1rem; border-radius:999px;
+    animation:navCtaToggle 1.4s steps(1) infinite, navCtaPulse 2.2s ease-in-out infinite;
+}
+@keyframes navCtaToggle {
+    0%, 49% { color:rgba(255,255,255,0.7); }
+    50%, 100% { color:var(--accent); }
+}
+@keyframes navCtaPulse {
+    0%, 100% { box-shadow:0 0 0 0 rgba(46,207,207,0.55); }
+    50% { box-shadow:0 0 0 8px rgba(46,207,207,0); }
+}
 .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
 .hamburger span { width:24px; height:2px; background:var(--text); display:block; }
 
@@ -43,11 +77,13 @@ nav.scrolled {
     padding:100px 2.5rem 60px; text-align:center;
 }
 .hero-bg {
-    position:absolute; top:0; left:0; width:100%; height:100%;
+    position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1;
     background-image:url('/static/img/daniel-leone-g30P1zcOzXo-unsplash.jpg');
     background-size:cover; background-position:center center;
     background-attachment:scroll; background-repeat:no-repeat;
+    transform:scale(1.4); animation:heroBgZoomOut 4s ease 0.2s forwards;
 }
+@keyframes heroBgZoomOut { to { transform:scale(1); } }
 .hero-bg::after {
     content:''; position:absolute; inset:0;
     background:
@@ -60,9 +96,15 @@ nav.scrolled {
     linear-gradient(rgba(46,207,207,0.15) 1px, transparent 1px),
     linear-gradient(90deg, rgba(46,207,207,0.15) 1px, transparent 1px);
     background-size:60px 60px;
+    transform:scale(0.6); animation:heroGridZoomOut 4s ease 0.2s forwards;
 }
 .hero-content { position:relative; z-index:2; max-width:760px; display:flex; flex-direction:column; align-items:center; }
-.hero-logo { width:520px; max-width:80vw; height:auto; mix-blend-mode:lighten; margin-bottom:20vh;}
+.hero-logo {
+    width:520px; max-width:80vw; height:auto; mix-blend-mode:lighten; margin-bottom:20vh;
+    opacity:0; transform:scale(0.6); animation:heroLogoFadeIn 4s ease 0.2s forwards;
+}
+@keyframes heroLogoFadeIn { to { opacity:1; transform:scale(1); } }
+@keyframes heroGridZoomOut { to { transform:scale(1); } }
 
 /* SECTIONS */
 section { padding:6rem 2.5rem; }
@@ -86,15 +128,12 @@ section { padding:6rem 2.5rem; }
 .container { max-width:1200px; margin:0 auto; }
 
 /* ABOUT */
-#about-heading, #team-heading, #sponsors-heading {
+#about-heading, #team-heading, #sponsors-heading, #join-us {
     scroll-margin-top: 88px;
 }
+#sponsors-heading { font-size:clamp(3.5rem,6vw,5rem); }
+#team-heading { font-size:clamp(3.5rem,6vw,5rem); }
 #about {
-    background-image: url('/static/img/2.png');
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: #000;
     position: relative;
     padding: 8rem 2.5rem;
     min-height: 60vh;
@@ -104,7 +143,6 @@ section { padding:6rem 2.5rem; }
 .about-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.5);
     z-index: 0;
 }
 #about .container {
@@ -143,26 +181,91 @@ section { padding:6rem 2.5rem; }
 @media(max-width:600px) { .about-goals { grid-template-columns:1fr; } }
 
 /* TEAM */
-#team { background:var(--bg2); overflow:hidden; padding:8rem 0; }
+#team { background:transparent; padding:8rem 0; }
 .team-intro { margin-bottom:3rem; text-align:center; }
 .team-intro .section-body { margin:0 auto; }
 
-/* SCROLLING TICKER */
-.team-ticker-wrap {
-    width:100%; overflow:hidden;
-    -webkit-mask-image:linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
-    mask-image:linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+/* STATIC GROUPED LAYOUT */
+.team-groups { display:flex; flex-direction:column; gap:4rem; }
+.team-group-title {
+    font-family:var(--header-font),sans-serif;
+    font-size:1.4rem; font-weight:800;
+    letter-spacing:0.06em; text-transform:uppercase;
+    color:#ffffff;
+    margin-bottom:1.5rem;
+    padding-bottom:0.6rem;
+    border-bottom:1px solid var(--border);
 }
-.team-ticker {
-    display:flex; gap:1.5rem;
-    width:max-content;
-    animation:tickerScroll 35s linear infinite;
+.team-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(220px, 260px));
+    gap:2rem;
 }
-.team-ticker:hover { animation-play-state:paused; }
-@keyframes tickerScroll {
-    0%   { transform:translateX(0); }
-    100% { transform:translateX(-50%); }
+.team-grid .team-card { width:auto; flex-shrink:initial; }
+
+/* JOIN US */
+.join-grid { justify-content:center; margin-top:3rem; }
+.join-card-desc { font-size:0.85rem; color:#e8eaf0; line-height:1.6; margin-top:0.3rem; }
+@media(min-width:701px) {
+    .join-grid { grid-template-columns:repeat(auto-fit, minmax(380px, 460px)); gap:3rem; }
+    .join-card h4 { font-size:1.6rem; margin-top:0.3rem; }
+    .join-card-desc { font-size:1rem; line-height:1.7; margin-top:0.6rem; }
 }
+.join-cta { text-align:center; margin-top:4rem; }
+.join-cta-btn {
+    display:inline-block; margin-top:1rem;
+    background:var(--accent); color:#04191a;
+    font-weight:700; font-size:0.9rem;
+    letter-spacing:0.04em; text-decoration:none;
+    padding:0.8rem 1.8rem; border-radius:999px;
+    transition:background 0.2s;
+}
+.join-cta-btn:hover { background:var(--accent2); }
+
+/* BLOG */
+.blog-grid {
+    display:flex; flex-direction:column;
+    gap:4rem;
+    margin-top:3rem;
+    max-width:1000px; margin-left:auto; margin-right:auto;
+}
+.blog-card { text-decoration:none; color:inherit; display:block; text-align:left; }
+.blog-card-photo {
+    width:100%; aspect-ratio:16/9; border-radius:12px;
+    background:var(--bg3); border:1px solid var(--border);
+    overflow:hidden; position:relative;
+    margin-bottom:1.2rem;
+}
+.blog-card h4 {
+    font-family:var(--header-font),sans-serif; font-size:1.6rem;
+    font-weight:700; color:#ffffff; letter-spacing:0.01em;
+    margin-bottom:0.6rem; line-height:1.25;
+}
+.blog-card p { font-size:0.95rem; color:#e8eaf0; line-height:1.6; max-width:640px; }
+@media(min-width:769px) {
+    .blog-card-photo { aspect-ratio:21/9; }
+}
+.blog-read-more {
+    display:inline-block; margin-top:0.9rem;
+    color:var(--accent); font-size:0.78rem; font-weight:700;
+    letter-spacing:0.06em; text-transform:uppercase;
+    transition:color 0.2s;
+}
+.blog-card:hover .blog-read-more { color:var(--accent2); }
+
+/* BLOG POST */
+.blog-post-container { max-width:760px; margin:0 auto; text-align:left; }
+.blog-back {
+    display:inline-block; margin-bottom:2rem;
+    color:var(--accent); text-decoration:none;
+    font-size:0.85rem; font-weight:600;
+    letter-spacing:0.03em; transition:color 0.2s;
+}
+.blog-back:hover { color:var(--accent2); }
+.blog-post-photo { aspect-ratio:16/9; margin-bottom:2rem; }
+.blog-post-title { color:#ffffff; margin-bottom:1.5rem; }
+.blog-post-body { font-size:1rem; color:#e8eaf0; line-height:1.8; }
+
 .team-card {
     flex-shrink:0; width:300px;
     background:transparent;
@@ -208,12 +311,12 @@ section { padding:6rem 2.5rem; }
 .team-card-icon-btn svg { width:15px; height:15px; fill:var(--text); }
 
 /* SPONSORS */
-#sponsors { background:var(--bg); padding:14rem 2.5rem; }
+#sponsors { background:transparent; padding:14rem 2.5rem; position:relative; }
 .sponsors-center { max-width:800px; margin:0 auto; text-align:center; }
 .sponsor-logos {
     display:flex; flex-direction:column;
     align-items:center; justify-content:center;
-    gap:3.5rem; margin-top:4rem;
+    gap:6rem; margin-top:4rem;
 }
 .sponsor-logo-item { display:flex; align-items:center; justify-content:center; }
 .sponsor-logo-item img {
@@ -221,7 +324,7 @@ section { padding:6rem 2.5rem; }
     opacity:0.9; transition:opacity 0.2s; display:block;
 }
 .sponsor-logo-item img:hover { opacity:1; }
-.sponsor-logo-item.primary img { height:160px; }
+.sponsor-logo-item.primary img { width:432px; height:400px; object-fit:fill; }
 .sponsor-logo-item.secondary img { height:100px; }
 
 /* CONTACT */
@@ -236,7 +339,7 @@ section { padding:6rem 2.5rem; }
 .contact-card a:hover { text-decoration:underline; }
 
 /* FOOTER */
-footer { background:#0b0c11; padding:0.5rem 0.5rem; }
+footer { background:#0b0c11; padding:0.5rem 0.5rem; margin-top:auto; }
 .f-wrap { max-width:100%; margin:0; }
 .f-grid {
     display:grid;
@@ -245,7 +348,7 @@ footer { background:#0b0c11; padding:0.5rem 0.5rem; }
     align-items:center;
 }
 .f-logo { display:flex; align-items:center; }
-.f-logo img { height:400px; width:auto; mix-blend-mode:lighten; display:block; }
+.f-logo img { height:70px; width:auto; mix-blend-mode:lighten; display:block; }
 .f-contact { text-align:center; }
 .f-col h5 { font-size:0.82rem; font-weight:600; color:#fff; margin-bottom:1rem; letter-spacing:0.01em; }
 .f-col .f-name { display:block; color:#fff; font-size:0.88rem; font-weight:600; margin-bottom:0.2rem; }
@@ -299,6 +402,8 @@ footer { background:#0b0c11; padding:0.5rem 0.5rem; }
     .footer-grid { grid-template-columns:1fr 1fr; }
     .hero-logo { width:200px; }
     .section-title { font-size:1.6rem; }
+    #sponsors-heading { font-size:2.6rem; }
+    #team-heading { font-size:2.6rem; }
     .section-body { font-size:0.85rem; line-height:1.6; }
     .about-center .section-body { font-size:1rem; font-weight:700; color:#ffffff; }
     .about-center .section-title { font-size:2rem; color:#ffffff; font-weight:900; }
@@ -306,21 +411,17 @@ footer { background:#0b0c11; padding:0.5rem 0.5rem; }
     .about-goal-card h3 { font-size:1.1rem; }
     .about-goals { gap:1rem; }
     #about {
-        background-size: contain;
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-color: #000;
         min-height: 50vh;
         padding: 4rem 1.2rem;
     }
     #sponsors { padding:0 1.2rem; height:100svh; display:flex; align-items:center; justify-content:center; }
     .sponsors-center { width:100%; }
-    .sponsor-logos { gap:3rem; margin-top:2.5rem; }
-    .sponsor-logo-item.primary img { height:80px; }
+    .sponsor-logos { gap:4rem; margin-top:2.5rem; }
+    .sponsor-logo-item.primary img { width:238px; height:220px; object-fit:fill; }
     .sponsor-logo-item.secondary img { height:55px; }
-    #team { padding:0; height:100svh; display:flex; flex-direction:column; justify-content:center; }
-    .team-card { width:65vw; }
-    .team-ticker { gap:1rem; }
+    #team { padding:3rem 0; }
+    .team-groups { gap:2.5rem; }
+    .team-grid { grid-template-columns:1fr 1fr; gap:1.2rem; }
     .f-grid { grid-template-columns:1fr; text-align:left; gap:1.5rem; }
     .f-socials { justify-content:flex-start; }
     .f-socials-col { align-items:flex-start; }
@@ -340,7 +441,7 @@ footer { background:#0b0c11; padding:0.5rem 0.5rem; }
     margin-bottom:1.5rem;
     }
     .f-mobile-logo img {
-    height:200px; width:auto; mix-blend-mode:lighten; display:block;
+    height:50px; width:auto; mix-blend-mode:lighten; display:block;
     }
     .f-accordion-item {
     border-top:1px solid rgba(255,255,255,0.1);

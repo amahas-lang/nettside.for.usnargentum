@@ -4,6 +4,9 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>USN Argentum | Rover 3D View</title>
+  <link rel="icon" href="/static/img/favicon.ico?v=3" sizes="32x32"/>
+  <link rel="icon" href="/static/img/favicon.svg?v=3" type="image/svg+xml"/>
+  <link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png"/>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -27,6 +30,23 @@
       font-family:'Inter',sans-serif;
       display:flex;
       flex-direction:column;
+      position:relative;
+    }
+    /* photo layer on its own animatable pseudo-element, zooming on load the
+       same way the home page's hero does */
+    body::before {
+      content:''; position:fixed; inset:0; z-index:-2;
+      background:url('/static/img/daniel-leone-g30P1zcOzXo-unsplash.jpg') center center / cover no-repeat;
+      transform:scale(1.4); animation:heroBgZoomOut 4s ease 0.2s forwards;
+      pointer-events:none;
+    }
+    @keyframes heroBgZoomOut { to { transform:scale(1); } }
+    /* subtle dark tint over the photo, same idea as the home page's hero
+       overlay, so white text stays readable against a busy image */
+    body::after {
+      content:''; position:fixed; inset:0; z-index:-1;
+      background:linear-gradient(180deg, rgba(8,8,8,0.55) 0%, rgba(8,8,8,0.7) 100%);
+      pointer-events:none;
     }
     nav {
       flex-shrink:0;
@@ -35,21 +55,39 @@
       align-items:center;
       justify-content:space-between;
       padding:0 2rem;
-      background:rgba(8,8,8,0.98);
-      border-bottom:1px solid var(--border);
+      background:transparent;
+      border-bottom:1px solid transparent;
     }
     .nav-logo {
       text-decoration:none;
       display:flex; align-items:center;
       line-height:1;
     }
-    .nav-back {
-      color:var(--muted); text-decoration:none;
-      font-size:0.82rem; font-weight:500;
-      letter-spacing:0.06em; text-transform:uppercase;
-      transition:color 0.2s;
+    .nav-links { display:flex; gap:2rem; list-style:none; align-items:center; }
+    .nav-links a {
+      color:rgba(255,255,255,0.7); text-decoration:none; font-size:0.82rem;
+      font-weight:500; letter-spacing:0.04em; text-transform:uppercase; transition:color 0.2s;
     }
-    .nav-back:hover { color:var(--accent); }
+    .nav-links a:hover { color:#fff; }
+    .nav-links a.nav-cta {
+      font-weight:800; padding:0.5rem 1.1rem; border-radius:999px;
+      animation:navCtaToggle 1.4s steps(1) infinite, navCtaPulse 2.2s ease-in-out infinite;
+    }
+    @keyframes navCtaToggle {
+      0%, 49% { color:rgba(255,255,255,0.7); }
+      50%, 100% { color:var(--accent); }
+    }
+    @keyframes navCtaPulse {
+      0%, 100% { box-shadow:0 0 0 0 rgba(46,207,207,0.55); }
+      50% { box-shadow:0 0 0 8px rgba(46,207,207,0); }
+    }
+    .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
+    .hamburger span { width:24px; height:2px; background:var(--text); display:block; }
+    @media(max-width:768px) {
+      nav { padding:0 1.5rem; }
+      .nav-links { display:none; }
+      .hamburger { display:flex; }
+    }
     .layout {
       flex:1;
       display:flex;
@@ -59,7 +97,7 @@
     #canvas-wrap {
       flex:1;
       position:relative;
-      background:#0b0d12;
+      background:transparent;
       min-width:0;
       min-height:0;
     }
@@ -69,18 +107,6 @@
       width:100%; height:100%;
       display:block;
     }
-    .view-badge {
-      position:absolute; top:1rem; left:1rem; z-index:5;
-      font-family:'Barlow Condensed',sans-serif;
-      font-size:0.9rem; font-weight:700;
-      letter-spacing:0.08em; text-transform:uppercase;
-      color:var(--accent);
-      background:rgba(8,8,8,0.82);
-      padding:0.3rem 0.75rem;
-      border-radius:4px;
-      border:1px solid var(--border);
-      pointer-events:none;
-    }
     .canvas-hint {
       position:absolute; bottom:1rem; left:50%;
       transform:translateX(-50%); z-index:5;
@@ -88,12 +114,14 @@
       border:1px solid var(--border);
       padding:0.4rem 1rem;
       border-radius:20px;
-      font-size:0.73rem; color:var(--muted);
+      font-size:0.73rem; color:#ffffff;
       pointer-events:none; white-space:nowrap;
     }
     .sidebar {
       width:260px; flex-shrink:0;
-      background:var(--bg2);
+      background:rgba(8,8,8,0.2);
+      backdrop-filter:blur(3px);
+      -webkit-backdrop-filter:blur(3px);
       border-left:1px solid var(--border);
       overflow-y:auto;
       padding:1.2rem 1.1rem;
@@ -108,43 +136,13 @@
       padding-bottom:0.35rem;
       border-bottom:1px solid var(--border);
     }
-    .view-btns { display:flex; flex-direction:column; gap:0.38rem; }
-    .vbtn {
-      background:var(--bg3);
-      border:1px solid var(--border);
-      color:var(--muted);
-      padding:0.52rem 0.8rem;
-      border-radius:5px; cursor:pointer;
-      font-size:0.79rem; font-weight:500;
-      text-align:left;
-      transition:all 0.18s;
-      font-family:'Inter',sans-serif;
-    }
-    .vbtn:hover, .vbtn.active {
-      border-color:var(--accent);
-      background:rgba(46,207,207,0.08);
-      color:var(--accent);
-    }
-    .parts-list { list-style:none; }
-    .parts-list li {
-      display:flex; align-items:center; gap:0.6rem;
-      padding:0.42rem 0;
-      border-bottom:1px solid rgba(255,255,255,0.04);
-      font-size:0.78rem; color:var(--muted);
-    }
-    .dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
-    .spec-table { width:100%; border-collapse:collapse; }
-    .spec-table tr { border-bottom:1px solid rgba(255,255,255,0.04); }
-    .spec-table td { padding:0.42rem 0; font-size:0.78rem; }
-    .spec-table td:first-child { color:var(--muted); }
-    .spec-table td:last-child { color:var(--text); font-weight:500; text-align:right; }
     .toggle-row {
       display:flex; align-items:center; justify-content:space-between;
       padding:0.42rem 0;
       border-bottom:1px solid rgba(255,255,255,0.04);
       font-size:0.78rem;
     }
-    .toggle-row label { color:var(--muted); }
+    .toggle-row label { color:#ffffff; font-weight:500; }
     .tog {
       width:34px; height:18px;
       background:var(--bg3);
@@ -166,45 +164,27 @@
     .arm-sliders { display:flex; flex-direction:column; gap:0.55rem; }
     .slider-row { display:flex; flex-direction:column; gap:0.15rem; }
     .slider-row label {
-      font-size:0.74rem; color:var(--muted);
+      font-size:0.74rem; color:#ffffff; font-weight:500;
       display:flex; justify-content:space-between;
     }
     .slider-row label span { color:var(--accent); }
     input[type=range] { width:100%; accent-color:var(--accent); cursor:pointer; }
     @media(max-width:700px) {
-      .sidebar { display:none; }
+      .layout { flex-direction:column; }
+      #canvas-wrap { flex:1 1 auto; min-height:0; }
+      .sidebar {
+        width:100%; flex:0 0 auto; max-height:46vh;
+        border-left:none; border-top:1px solid var(--border);
+      }
       .canvas-hint { display:none; }
-      .mobile-bar {
-        display:flex;
-        position:absolute; bottom:0; left:0; right:0; z-index:10;
-        background:rgba(10,12,16,0.92);
-        border-top:1px solid var(--border);
-        overflow-x:auto;
-        -webkit-overflow-scrolling:touch;
-        padding:0.5rem 0.75rem;
-        gap:0.5rem;
-        scrollbar-width:none;
-      }
-      .mobile-bar::-webkit-scrollbar { display:none; }
-      .mobile-btn {
-        flex-shrink:0;
-        background:var(--bg3); border:1px solid var(--border);
-        color:var(--muted); padding:0.5rem 1rem;
-        border-radius:5px; font-size:0.78rem; font-weight:500;
-        font-family:'Inter',sans-serif; white-space:nowrap;
-        cursor:pointer; transition:all 0.18s;
-      }
-      .mobile-btn.active,
-      .mobile-btn:active { border-color:var(--accent); color:var(--accent); background:rgba(46,207,207,0.1); }
       .mobile-hint {
         position:absolute; top:1rem; right:1rem; z-index:5;
         background:rgba(8,8,8,0.82); border:1px solid var(--border);
         padding:0.35rem 0.75rem; border-radius:20px;
-        font-size:0.7rem; color:var(--muted); pointer-events:none;
+        font-size:0.7rem; color:#ffffff; pointer-events:none;
       }
     }
     @media(min-width:701px) {
-      .mobile-bar { display:none; }
       .mobile-hint { display:none; }
     }
   </style>
@@ -213,42 +193,28 @@
 
 <nav>
   <a href="index.html" class="nav-logo">
-     <img src="USN-3.svg" alt="" style="height:55px;width:200px;object-fit:cover;object-position:center;mix-blend-mode:lighten;display:block;"/>
+     <img src="/static/img/secondarylogo.png" alt="Secondary Logo" style="height:40px;width:auto;display:block;"/>
   </a>
-  <a href="index.html" class="nav-back">Back to Home</a>
+  <ul class="nav-links">
+    <li><a href="index.html#hero">Home</a></li>
+    <li><a href="team.html">TEAM</a></li>
+    <li><a href="rover-3d.html">Rover</a></li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="join-us.html" class="nav-cta">Join Us</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
 </nav>
 
 <div class="layout">
   <div id="canvas-wrap">
     <canvas id="c"></canvas>
-    <div class="view-badge" id="view-badge">Perspective View</div>
     <div class="canvas-hint">Drag to rotate  |  Scroll to zoom  |  Right-click to pan</div>
-    <div class="mobile-hint">1 finger rotate  |  2 fingers zoom</div>
-    <div class="mobile-bar">
-      <button class="mobile-btn active" id="mb-persp" onclick="snap('persp');setMobileActive(this)">Perspective</button>
-      <button class="mobile-btn" id="mb-front" onclick="snap('front');setMobileActive(this)">Front</button>
-      <button class="mobile-btn" id="mb-rear"  onclick="snap('rear');setMobileActive(this)">Rear</button>
-      <button class="mobile-btn" id="mb-left"  onclick="snap('left');setMobileActive(this)">Left</button>
-      <button class="mobile-btn" id="mb-right" onclick="snap('right');setMobileActive(this)">Right</button>
-      <button class="mobile-btn" id="mb-top"   onclick="snap('top');setMobileActive(this)">Top</button>
-      <button class="mobile-btn" id="mb-iso"   onclick="snap('iso');setMobileActive(this)">Iso</button>
-    </div>
+    <div class="mobile-hint">1 finger rotate  |  2 fingers zoom  |  3 fingers pan</div>
   </div>
 
   <div class="sidebar">
-    <div class="sb-section">
-      <h3>Camera Presets</h3>
-      <div class="view-btns">
-        <button class="vbtn active" id="btn-persp" onclick="snap('persp')">Perspective</button>
-        <button class="vbtn" id="btn-front"  onclick="snap('front')">Front View</button>
-        <button class="vbtn" id="btn-rear"   onclick="snap('rear')">Rear View</button>
-        <button class="vbtn" id="btn-left"   onclick="snap('left')">Left Side</button>
-        <button class="vbtn" id="btn-right"  onclick="snap('right')">Right Side</button>
-        <button class="vbtn" id="btn-top"    onclick="snap('top')">Top Down</button>
-        <button class="vbtn" id="btn-iso"    onclick="snap('iso')">Isometric</button>
-      </div>
-    </div>
-
     <div class="sb-section">
       <h3>Arm Pose</h3>
       <div class="arm-sliders">
@@ -257,8 +223,8 @@
           <input type="range" min="-180" max="180" value="0" oninput="setArm('turret',this.value)"/>
         </div>
         <div class="slider-row">
-          <label>Shoulder <span id="lbl-shoulder">-30</span></label>
-          <input type="range" min="-90" max="90" value="-30" oninput="setArm('shoulder',this.value)"/>
+          <label>Shoulder <span id="lbl-shoulder">0</span></label>
+          <input type="range" min="-90" max="90" value="0" oninput="setArm('shoulder',this.value)"/>
         </div>
         <div class="slider-row">
           <label>Elbow <span id="lbl-elbow">60</span></label>
@@ -268,37 +234,7 @@
           <label>Wrist <span id="lbl-wrist">-30</span></label>
           <input type="range" min="-120" max="120" value="-30" oninput="setArm('wrist',this.value)"/>
         </div>
-        <div class="slider-row">
-          <label>Gripper <span id="lbl-grip">50%</span></label>
-          <input type="range" min="0" max="100" value="50" oninput="setArm('grip',this.value)"/>
-        </div>
       </div>
-    </div>
-
-    <div class="sb-section">
-      <h3>Components</h3>
-      <ul class="parts-list">
-        <li><span class="dot" style="background:#1a1d24"></span>Track Modules x4</li>
-        <li><span class="dot" style="background:#111318"></span>Rubber Treads</li>
-        <li><span class="dot" style="background:#1e2530"></span>Carbon Chassis</li>
-        <li><span class="dot" style="background:#8090a0"></span>Turret Platform</li>
-        <li><span class="dot" style="background:#b8c4d0"></span>Robotic Arm (4-DOF)</li>
-        <li><span class="dot" style="background:#111318"></span>Servo Motors</li>
-        <li><span class="dot" style="background:#1a44cc"></span>Blue Sensors</li>
-        <li><span class="dot" style="background:#c8d4e0"></span>Parallel Gripper</li>
-      </ul>
-    </div>
-
-    <div class="sb-section">
-      <h3>Specs</h3>
-      <table class="spec-table">
-        <tr><td>Track Modules</td><td>4 independent</td></tr>
-        <tr><td>Drive</td><td>Tank tracks</td></tr>
-        <tr><td>Turret</td><td>360 rotation</td></tr>
-        <tr><td>Arm DOF</td><td>4 joints</td></tr>
-        <tr><td>End Effector</td><td>Parallel gripper</td></tr>
-        <tr><td>Status</td><td>Prototype 2025</td></tr>
-      </table>
     </div>
 
     <div class="sb-section">
@@ -311,20 +247,19 @@
         <label>Wireframe</label>
         <div class="tog" id="tog-wire" onclick="toggleWire()"></div>
       </div>
-      <div class="toggle-row">
-        <label>Grid Floor</label>
-        <div class="tog on" id="tog-grid" onclick="toggleGrid()"></div>
-      </div>
     </div>
   </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 <script>
 
 // ─── ALL GLOBALS DEFINED HERE (outside any function) ───
-var renderer, camera, scene, grid;
+var renderer, camera, scene;
 var turretGroup, upperArmPivot, forearmPivot, wristPivot, fingerL, fingerR;
+var shoulderAxisLocal = new THREE.Vector3(0, 0, 1); // set once the model loads, see below
+var SHOULDER_AXIS_DEG = 20; // degrees right of raw local-X, locked via the gizmo
 var allMeshes = [];
 var autoRot = true;
 var drag = false, rightDrag = false;
@@ -332,6 +267,19 @@ var prevMouse = {x:0, y:0};
 var sph = {theta:0.55, phi:1.08, r:7.5};
 var tgt;
 var wireOn = false;
+
+// ─── MOBILE NAV TOGGLE (same behavior as the other pages' script.js) ───
+function toggleMenu() {
+  var links = document.querySelector('.nav-links');
+  var isOpen = links.getAttribute('data-open') === 'true';
+  if (isOpen) {
+    links.removeAttribute('style');
+    links.setAttribute('data-open', 'false');
+  } else {
+    links.style.cssText = 'display:flex;flex-direction:column;position:fixed;top:56px;left:0;right:0;background:rgba(8,8,8,0.92);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:1.5rem 2rem;gap:1.2rem;border-bottom:1px solid rgba(46,207,207,0.15);z-index:99;';
+    links.setAttribute('data-open', 'true');
+  }
+}
 
 // ─── MATERIAL FACTORY (always returns a new instance) ───
 function newMat(col, rough, metal, emissive) {
@@ -352,53 +300,6 @@ function addMesh(geo, mat, parent) {
   return m;
 }
 
-// ─── TRACK MODULE BUILDER ───
-function buildTrack() {
-  var g  = new THREE.Group();
-  var TL = 1.5, TH = 0.30, TW = 0.26, WR = 0.15;
-
-  // housing body
-  addMesh(new THREE.BoxGeometry(TL - WR * 1.8, TH, TW), newMat(0x1a1d24, 0.85, 0.1), g);
-
-  // end-cap cylinders
-  var xs = [-1, 1];
-  for (var i = 0; i < xs.length; i++) {
-    var sx  = xs[i];
-    var hub = addMesh(new THREE.CylinderGeometry(WR, WR, TW, 24), newMat(0x1a1d24, 0.85, 0.1), g);
-    hub.rotation.x = Math.PI / 2;
-    hub.position.x = sx * (TL / 2 - WR * 0.9);
-
-    var ring = addMesh(new THREE.TorusGeometry(WR * 0.72, 0.018, 6, 20), newMat(0x111318, 0.95, 0.0), g);
-    ring.rotation.x = Math.PI / 2;
-    ring.position.x = sx * (TL / 2 - WR * 0.9);
-  }
-
-  // tread bars
-  var nT = 13;
-  for (var j = 0; j < nT; j++) {
-    var fx  = ((j / (nT - 1)) - 0.5) * (TL - WR * 2.0);
-    var top = addMesh(new THREE.BoxGeometry(0.06, 0.035, TW + 0.025), newMat(0x111318, 0.95, 0.0), g);
-    top.position.set(fx, TH / 2 + 0.01, 0);
-    var bot = addMesh(new THREE.BoxGeometry(0.06, 0.035, TW + 0.025), newMat(0x111318, 0.95, 0.0), g);
-    bot.position.set(fx, -TH / 2 - 0.01, 0);
-  }
-
-  // side label panels
-  var szs = [-1, 1];
-  for (var k = 0; k < szs.length; k++) {
-    var p = addMesh(new THREE.BoxGeometry(TL * 0.65, TH * 0.42, 0.014), newMat(0x1a2030, 0.9, 0.0), g);
-    p.position.z = szs[k] * (TW / 2 + 0.007);
-  }
-
-  return g;
-}
-
-function setMobileActive(el) {
-  var btns = document.querySelectorAll('.mobile-btn');
-  for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('active'); }
-  el.classList.add('active');
-}
-
 // ─── CAMERA APPLY ───
 function applyCamera() {
   camera.position.set(
@@ -409,46 +310,22 @@ function applyCamera() {
   camera.lookAt(tgt);
 }
 
-// ─── CAMERA PRESETS ───
-var SNAPS = {
-  persp: {theta:0.55,        phi:1.08, r:7.5, label:'Perspective View'},
-  front: {theta:0,           phi:1.42, r:7.0, label:'Front View'},
-  rear:  {theta:Math.PI,     phi:1.42, r:7.0, label:'Rear View'},
-  left:  {theta:-Math.PI/2,  phi:1.42, r:7.0, label:'Left Side View'},
-  right: {theta: Math.PI/2,  phi:1.42, r:7.0, label:'Right Side View'},
-  top:   {theta:0.55,        phi:0.12, r:8.0, label:'Top-Down View'},
-  iso:   {theta: Math.PI/4,  phi:0.88, r:7.5, label:'Isometric View'}
-};
-
-function snap(name) {
-  var s = SNAPS[name];
-  if (!s) return;
-  autoRot = false;
-  document.getElementById('tog-rot').classList.remove('on');
-  tgt.set(0, 0.8, 0);
-  sph.theta = s.theta;
-  sph.phi   = s.phi;
-  sph.r     = s.r;
-  document.getElementById('view-badge').textContent = s.label;
-  var btns = document.querySelectorAll('.vbtn');
-  for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('active'); }
-  var btn = document.getElementById('btn-' + name);
-  if (btn) btn.classList.add('active');
-  applyCamera();
-}
-
 // ─── ARM CONTROL ───
 function setArm(joint, val) {
   var v = parseFloat(val);
   var D = THREE.MathUtils.degToRad;
-  if (joint === 'turret')   { turretGroup.rotation.y   = D(v);  document.getElementById('lbl-turret').textContent   = v; }
-  if (joint === 'shoulder') { upperArmPivot.rotation.z = D(v);  document.getElementById('lbl-shoulder').textContent = v; }
-  if (joint === 'elbow')    { forearmPivot.rotation.z  = D(v);  document.getElementById('lbl-elbow').textContent    = v; }
-  if (joint === 'wrist')    { wristPivot.rotation.z    = D(v);  document.getElementById('lbl-wrist').textContent    = v; }
-  if (joint === 'grip') {
-    var spread = (v / 100) * 0.07;
-    fingerL.position.x = -spread;
-    fingerR.position.x =  spread;
+  if (joint === 'turret'   && turretGroup)   { turretGroup.rotation.y   = D(v);  document.getElementById('lbl-turret').textContent   = v; }
+  if (joint === 'shoulder' && upperArmPivot) {
+    upperArmPivot.quaternion.setFromAxisAngle(shoulderAxisLocal, D(v));
+    document.getElementById('lbl-shoulder').textContent = v;
+  }
+  if (joint === 'elbow'    && forearmPivot)  { forearmPivot.rotation.x  = D(v);  document.getElementById('lbl-elbow').textContent    = v; }
+  if (joint === 'wrist'    && wristPivot)    { wristPivot.rotation.x    = D(v);  document.getElementById('lbl-wrist').textContent    = v; }
+  if (joint === 'grip' && fingerL) {
+    // single combined linear-gripper part (model has no separate L/R finger nodes)
+    var extend = (v / 100) * 0.03;
+    fingerL.position.x = fingerL.userData.baseX + extend;
+    if (fingerR) fingerR.position.x = -extend;
     document.getElementById('lbl-grip').textContent = Math.round(v) + '%';
   }
 }
@@ -467,21 +344,16 @@ function toggleWire() {
   }
 }
 
-function toggleGrid() {
-  grid.visible = !grid.visible;
-  document.getElementById('tog-grid').classList.toggle('on', grid.visible);
-}
-
 // ─── INIT (runs after page load) ───
 function init() {
   var wrap   = document.getElementById('canvas-wrap');
   var canvas = document.getElementById('c');
 
-  renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false });
+  renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
-  renderer.setClearColor(0x0b0d12, 1);
+  renderer.setClearColor(0x000000, 0); // transparent -- the page's photo shows through
 
   camera = new THREE.PerspectiveCamera(42, wrap.offsetWidth / wrap.offsetHeight, 0.05, 300);
   tgt    = new THREE.Vector3(0, 0.8, 0);
@@ -499,13 +371,14 @@ function init() {
 
   // scene
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x0b0d12);
-  scene.fog = new THREE.FogExp2(0x0b0d12, 0.012);
+  scene.background = null; // transparent, so the page's photo shows through
+  // no fog -- it would tint the edges with its own color against a
+  // transparent background instead of blending, unlike before
 
   // lights
-  scene.add(new THREE.AmbientLight(0x3a4a5a, 1.1));
+  scene.add(new THREE.AmbientLight(0x6a7688, 2.4));
 
-  var key = new THREE.DirectionalLight(0xfff5e8, 1.6);
+  var key = new THREE.DirectionalLight(0xfff5e8, 3.0);
   key.position.set(6, 10, 5);
   key.castShadow = true;
   key.shadow.mapSize.width  = 2048;
@@ -518,11 +391,11 @@ function init() {
   key.shadow.camera.bottom = -8;
   scene.add(key);
 
-  var fill = new THREE.DirectionalLight(0x4466aa, 0.5);
+  var fill = new THREE.DirectionalLight(0x6688cc, 1.4);
   fill.position.set(-8, 3, -4);
   scene.add(fill);
 
-  var back = new THREE.DirectionalLight(0x2ecfcf, 0.2);
+  var back = new THREE.DirectionalLight(0x2ecfcf, 0.6);
   back.position.set(0, -2, -10);
   scene.add(back);
 
@@ -530,149 +403,114 @@ function init() {
   var rover = new THREE.Group();
   scene.add(rover);
 
-  // ── 4 TRACK MODULES ──
-  var trackDefs = [
-    {x:-1.10, y:0, z:-0.80},
-    {x: 1.10, y:0, z:-0.80},
-    {x:-1.10, y:0, z: 0.80},
-    {x: 1.10, y:0, z: 0.80}
-  ];
-  for (var ti = 0; ti < trackDefs.length; ti++) {
-    var tm = buildTrack();
-    tm.position.set(trackDefs[ti].x, trackDefs[ti].y, trackDefs[ti].z);
-    rover.add(tm);
-  }
+  // ── LOAD REAL ROVER MODEL (replaces procedural placeholder) ──
+  var MODEL_SCALE = 4.5; // model's native size is ~0.4m; scale up to match old camera framing
+  var gltfLoader = new THREE.GLTFLoader();
+  gltfLoader.load('static/models/taurus_rover.glb', function (gltf) {
+    var model = gltf.scene;
+    model.scale.setScalar(MODEL_SCALE);
+    rover.add(model);
+    model.updateMatrixWorld(true);
 
-  // ── CHASSIS ──
-  var CW = 1.75, CH = 0.38, CD = 2.1;
+    model.traverse(function (obj) {
+      if (obj.isMesh) {
+        obj.castShadow    = true;
+        obj.receiveShadow = true;
+        allMeshes.push(obj);
+      }
+    });
 
-  var chassisBody = addMesh(new THREE.BoxGeometry(CW, CH, CD), newMat(0x1e2530, 0.75, 0.35), rover);
-  chassisBody.position.y = 0.32;
+    // ── RIG THE ARM: the file ships every part as a flat sibling with a
+    // fixed baked transform (no bones/rig). Re-parent the named joints into
+    // a proper pivot chain so each slider rotates everything downstream of
+    // it, using attach() so the visual position doesn't jump on re-parent.
+    var j1 = model.getObjectByName('A-J1');                  // turret / base yaw
+    var j2 = model.getObjectByName('A-J2');                  // shoulder
+    var j3 = model.getObjectByName('A-J3');                  // elbow
+    var j4 = model.getObjectByName('A-J4');                  // wrist
+    var j5 = model.getObjectByName('A-J5-Fingers_Linear');   // gripper (linear)
 
-  var bevel = addMesh(new THREE.BoxGeometry(CW - 0.08, 0.055, CD - 0.08), newMat(0x1e2530, 0.75, 0.35), rover);
-  bevel.position.y = 0.32 + CH / 2 + 0.022;
+    if (j1 && j2) j1.attach(j2);
+    if (j2 && j3) j2.attach(j3);
+    if (j3 && j4) j3.attach(j4);
+    if (j4 && j5) j4.attach(j5);
 
-  // side skirts
-  var skirtXs = [-1, 1];
-  for (var si = 0; si < skirtXs.length; si++) {
-    var skirt = addMesh(new THREE.BoxGeometry(0.07, 0.20, CD * 0.82), newMat(0x1a1d24, 0.8, 0.15), rover);
-    skirt.position.set(skirtXs[si] * (CW / 2 + 0.038), 0.25, 0);
-  }
+    // Turret needs a guaranteed flat, world-horizontal spin -- j1's own baked
+    // orientation from the file isn't aligned to world axes, so rotating it
+    // directly would wobble/tilt instead of spinning flat. Wrap it in a bare
+    // pivot (identity rotation) placed at its world position, and rotate
+    // that pivot instead; attach() preserves j1's visual pose exactly.
+    var turretPivot = null;
+    if (j1) {
+      turretPivot = new THREE.Group();
+      turretPivot.position.copy(j1.getWorldPosition(new THREE.Vector3()));
+      rover.add(turretPivot);
+      turretPivot.attach(j1);
+    }
 
-  // front camera panel
-  var camPanel = addMesh(new THREE.BoxGeometry(0.30, 0.18, 0.04), newMat(0x0a0e16, 0.8, 0.3), rover);
-  camPanel.position.set(0, 0.35, -CD / 2 - 0.02);
+    // Shoulder pivot: placed exactly at A-J2's transform relative to A-J1,
+    // read straight off the loaded objects (matrixWorld) so it's immune to
+    // this file's baked axis convention (Blender's glTF export rotates
+    // everything to Y-up; a parent-relative transform is invariant to
+    // that, so this reproduces the Blender-verified placement exactly).
+    //
+    // Split into TWO nested groups, same as the Blender rig's per-joint
+    // "_origin"/"_joint" empty pair -- and for the same reason: A-J1->A-J2
+    // is a *compound* rotation (not a pure single-axis one), and three.js
+    // stores rotation as an XYZ Euler. Baking that compound rest rotation
+    // directly into the object whose `.rotation.x` the slider drives means
+    // `.rotation.x = v` recomposes Euler(v, oldY, oldZ) -- a DIFFERENT
+    // rotation, not "spin v further around the rest orientation's own X
+    // axis" -- so the arm swings around the wrong axis. (Elbow/wrist don't
+    // need this split only because A-J2->A-J3 and A-J3->A-J4 both happen
+    // to have zero relative rotation in the source URDF, so there's no
+    // compound rotation for their sliders to fight with.)
+    // shoulderOrigin: fixed rest transform, never touched.
+    // shoulderJoint:  identity at rest, parented under shoulderOrigin --
+    //                 THIS is what `.rotation.x` poses, cleanly.
+    var shoulderPivot = null;
+    if (j1 && j2) {
+      j1.updateMatrixWorld(true);
+      j2.updateMatrixWorld(true);
+      var relMatrix = new THREE.Matrix4()
+        .copy(j1.matrixWorld).invert()
+        .multiply(j2.matrixWorld);
+      var shoulderOrigin = new THREE.Group();
+      relMatrix.decompose(shoulderOrigin.position, shoulderOrigin.quaternion, shoulderOrigin.scale);
+      j1.add(shoulderOrigin);
+      var shoulderJoint = new THREE.Group();
+      shoulderOrigin.add(shoulderJoint);
+      shoulderJoint.attach(j2);
+      shoulderPivot = shoulderJoint;
 
-  var lensBody = addMesh(new THREE.CylinderGeometry(0.048, 0.048, 0.055, 18), newMat(0x050810, 0.1, 0.9), rover);
-  lensBody.rotation.x = Math.PI / 2;
-  lensBody.position.set(0, 0.35, -CD / 2 - 0.052);
+      // Shoulder rotation axis, calibrated and locked in: perpendicular to
+      // raw local-X by SHOULDER_AXIS_DEG, negated -- gives the correct
+      // vertical swing plane. Converted into shoulderOrigin's local space
+      // via its live world quaternion so it can't pick up a sign/order
+      // mistake. setArm() spins shoulderJoint around this axis.
+      var axisWorld = new THREE.Vector3(0, 0, 1)
+        .applyAxisAngle(new THREE.Vector3(0, 1, 0), THREE.MathUtils.degToRad(-SHOULDER_AXIS_DEG))
+        .negate();
+      var originWorldQuat = new THREE.Quaternion();
+      shoulderOrigin.getWorldQuaternion(originWorldQuat);
+      shoulderAxisLocal = axisWorld.applyQuaternion(originWorldQuat.clone().invert()).normalize();
+    }
 
-  var lensGlow = addMesh(new THREE.CylinderGeometry(0.022, 0.022, 0.056, 12), newMat(0x1a44cc, 0.15, 0.9, 0x0a1a44), rover);
-  lensGlow.rotation.x = Math.PI / 2;
-  lensGlow.position.set(0, 0.35, -CD / 2 - 0.052);
+    turretGroup   = turretPivot;
+    upperArmPivot = shoulderPivot;
+    forearmPivot  = j3;
+    wristPivot    = j4;
+    fingerL       = j5; // single combined linear-gripper part (see setArm)
+    fingerR       = null;
+    if (fingerL) fingerL.userData.baseX = fingerL.position.x;
 
-  // ── TURRET ──
-  turretGroup = new THREE.Group();
-  turretGroup.position.set(0, 0.32 + CH / 2 + 0.07, 0);
-  rover.add(turretGroup);
-
-  addMesh(new THREE.CylinderGeometry(0.36, 0.40, 0.09, 32), newMat(0x8090a0, 0.45, 0.65), turretGroup);
-
-  var turretTop = addMesh(new THREE.CylinderGeometry(0.32, 0.36, 0.05, 32), newMat(0x8090a0, 0.45, 0.65), turretGroup);
-  turretTop.position.y = 0.07;
-
-  var goldRing = addMesh(new THREE.TorusGeometry(0.37, 0.017, 8, 32), newMat(0x2ecfcf, 0.4, 0.7, 0x110800), turretGroup);
-  goldRing.rotation.x = Math.PI / 2;
-  goldRing.position.y = -0.018;
-
-  // ── ROBOTIC ARM ──
-  var shoulderPivot = new THREE.Group();
-  shoulderPivot.position.set(0.12, 0.10, -0.06);
-  turretGroup.add(shoulderPivot);
-
-  addMesh(new THREE.BoxGeometry(0.15, 0.14, 0.20), newMat(0x111318, 0.6, 0.3), shoulderPivot);
-  var blueS = addMesh(new THREE.BoxGeometry(0.065, 0.065, 0.065), newMat(0x1a44cc, 0.25, 0.7, 0x081022), shoulderPivot);
-  blueS.position.set(0.10, 0.04, 0);
-
-  // upper arm
-  upperArmPivot = new THREE.Group();
-  shoulderPivot.add(upperArmPivot);
-
-  var upperArmMesh = addMesh(new THREE.BoxGeometry(0.105, 0.74, 0.105), newMat(0xb8c4d0, 0.35, 0.6), upperArmPivot);
-  upperArmMesh.position.y = 0.37;
-
-  var elbowServo = addMesh(new THREE.BoxGeometry(0.135, 0.135, 0.16), newMat(0x111318, 0.6, 0.3), upperArmPivot);
-  elbowServo.position.y = 0.80;
-
-  // forearm
-  forearmPivot = new THREE.Group();
-  forearmPivot.position.y = 0.80;
-  upperArmPivot.add(forearmPivot);
-
-  var forearmMesh = addMesh(new THREE.BoxGeometry(0.09, 0.60, 0.09), newMat(0xb8c4d0, 0.35, 0.6), forearmPivot);
-  forearmMesh.position.y = 0.30;
-
-  var blueE = addMesh(new THREE.BoxGeometry(0.058, 0.058, 0.058), newMat(0x1a44cc, 0.25, 0.7, 0x081022), forearmPivot);
-  blueE.position.set(0.075, 0.05, 0);
-
-  // wrist
-  wristPivot = new THREE.Group();
-  wristPivot.position.y = 0.62;
-  forearmPivot.add(wristPivot);
-
-  addMesh(new THREE.BoxGeometry(0.115, 0.115, 0.145), newMat(0x111318, 0.6, 0.3), wristPivot);
-
-  var wristLink = addMesh(new THREE.BoxGeometry(0.075, 0.22, 0.075), newMat(0xb8c4d0, 0.35, 0.6), wristPivot);
-  wristLink.position.y = 0.18;
-
-  // gripper base
-  var gripperBase = new THREE.Group();
-  gripperBase.position.y = 0.32;
-  wristPivot.add(gripperBase);
-
-  var palm = addMesh(new THREE.BoxGeometry(0.16, 0.065, 0.10), newMat(0xb8c4d0, 0.35, 0.6), gripperBase);
-  palm.position.y = 0.032;
-
-  // left finger
-  fingerL = new THREE.Group();
-  gripperBase.add(fingerL);
-  var fLMesh = addMesh(new THREE.BoxGeometry(0.028, 0.17, 0.038), newMat(0xc8d4e0, 0.2, 0.85), fingerL);
-  fLMesh.position.y = 0.15;
-  var tipL = addMesh(new THREE.BoxGeometry(0.028, 0.042, 0.028), newMat(0x1a44cc, 0.15, 0.9, 0x0a1a44), fingerL);
-  tipL.position.y = 0.25;
-
-  // right finger
-  fingerR = new THREE.Group();
-  gripperBase.add(fingerR);
-  var fRMesh = addMesh(new THREE.BoxGeometry(0.028, 0.17, 0.038), newMat(0xc8d4e0, 0.2, 0.85), fingerR);
-  fRMesh.position.y = 0.15;
-  var tipR = addMesh(new THREE.BoxGeometry(0.028, 0.042, 0.028), newMat(0x1a44cc, 0.15, 0.9, 0x0a1a44), fingerR);
-  tipR.position.y = 0.25;
-
-  // initial gripper spread
-  fingerL.position.x = -0.05;
-  fingerR.position.x =  0.05;
-
-  // ── GRID + GROUND ──
-  grid = new THREE.GridHelper(30, 30, 0x2ecfcf, 0x0a2020);
-  grid.material.opacity     = 0.25;
-  grid.material.transparent = true;
-  grid.position.y = -0.18;
-  scene.add(grid);
-
-  var groundMesh = new THREE.Mesh(
-    new THREE.PlaneGeometry(60, 60),
-    newMat(0x080a0e, 1.0, 0.0)
-  );
-  groundMesh.rotation.x    = -Math.PI / 2;
-  groundMesh.position.y    = -0.19;
-  groundMesh.receiveShadow = true;
-  scene.add(groundMesh);
-
-  // initial arm pose
-  upperArmPivot.rotation.z = THREE.MathUtils.degToRad(-30);
-  forearmPivot.rotation.z  = THREE.MathUtils.degToRad(60);
-  wristPivot.rotation.z    = THREE.MathUtils.degToRad(-30);
+    // initial arm pose (moved here from init() since joints load async)
+    // shoulder starts at 0 -- its rest transform IS the correct attachment
+    if (forearmPivot)  forearmPivot.rotation.x  = THREE.MathUtils.degToRad(60);
+    if (wristPivot)    wristPivot.rotation.x    = THREE.MathUtils.degToRad(-30);
+  }, undefined, function (err) {
+    console.error('Failed to load rover model:', err);
+  });
 
   // ── MOUSE / TOUCH EVENTS ──
   applyCamera();
@@ -708,9 +546,10 @@ function init() {
     applyCamera();
   }, {passive: true});
 
-  // ── TOUCH: single finger rotate, two finger pinch-zoom, momentum ──
+  // ── TOUCH: 1 finger rotate, 2 finger pinch-zoom, 3 finger pan, momentum ──
   var touches       = {};
   var lastPinchDist = null;
+  var lastPanCenter = null;
   var velTheta      = 0;
   var velPhi        = 0;
   var lastTouchTime = 0;
@@ -729,6 +568,7 @@ function init() {
       touches[t.identifier] = {x: t.clientX, y: t.clientY};
     }
     lastPinchDist = null;
+    lastPanCenter = null;
   }, {passive: false});
 
   canvas.addEventListener('touchmove', function(e) {
@@ -743,8 +583,25 @@ function init() {
       }
     }
 
-    if (e.touches.length === 2) {
+    if (e.touches.length === 3) {
+      // ── THREE FINGER PAN ──
+      var cx = (e.touches[0].clientX + e.touches[1].clientX + e.touches[2].clientX) / 3;
+      var cy = (e.touches[0].clientY + e.touches[1].clientY + e.touches[2].clientY) / 3;
+      if (lastPanCenter !== null) {
+        var pdx = cx - lastPanCenter.x;
+        var pdy = cy - lastPanCenter.y;
+        var right = new THREE.Vector3();
+        camera.getWorldDirection(right);
+        right.cross(camera.up).normalize();
+        tgt.addScaledVector(right, -pdx * 0.006);
+        tgt.y += pdy * 0.006;
+        applyCamera();
+      }
+      lastPanCenter = {x: cx, y: cy};
+      lastPinchDist = null;
+    } else if (e.touches.length === 2) {
       // ── PINCH ZOOM ──
+      lastPanCenter = null;
       var t0 = e.touches[0];
       var t1 = e.touches[1];
       var dist = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
@@ -755,6 +612,7 @@ function init() {
       }
       lastPinchDist = dist;
     } else if (e.touches.length === 1) {
+      lastPanCenter = null;
       // ── SINGLE FINGER ROTATE ──
       var touch = e.touches[0];
       var prev  = touches[touch.identifier];
@@ -781,6 +639,7 @@ function init() {
       delete touches[e.changedTouches[i].identifier];
     }
     lastPinchDist = null;
+    lastPanCenter = null;
     // apply momentum on lift
     if (e.touches.length === 0) {
       var momentumId = requestAnimationFrame(function applyMomentum() {
