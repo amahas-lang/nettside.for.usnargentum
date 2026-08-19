@@ -405,8 +405,8 @@ footer { background:#0b0c11; padding:0.5rem 0.5rem; margin-top:auto; }
     #sponsors-heading { font-size:2.6rem; }
     #team-heading { font-size:2.6rem; }
     .section-body { font-size:0.85rem; line-height:1.6; }
-    .about-center .section-body { font-size:1rem; font-weight:700; color:#ffffff; }
-    .about-center .section-title { font-size:2rem; color:#ffffff; font-weight:900; }
+    .about-center .section-body { font-size:0.8rem; font-weight:600; color:#ffffff; }
+    .about-center .section-title { font-size:1.6rem; color:#ffffff; font-weight:900; }
     .about-goal-card { padding:1.2rem; }
     .about-goal-card h3 { font-size:1.1rem; }
     .about-goals { gap:1rem; }
