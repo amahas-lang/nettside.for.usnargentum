@@ -51,7 +51,8 @@
     }
     nav {
       flex-shrink:0;
-      height:56px;
+      width:549px;
+      height:68px;
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -281,7 +282,7 @@ function toggleMenu() {
     // nav's actual rendered bottom edge (not a hardcoded 56px) so there's
     // never a gap, whatever the real nav height ends up being on device
     var navBottom = document.querySelector('nav').getBoundingClientRect().bottom;
-    links.style.cssText = 'display:flex;flex-direction:column;position:fixed;top:' + navBottom + 'px;left:0;right:0;background:rgba(8,8,8,0.1);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:1.5rem 2rem;gap:1.2rem;border-bottom:1px solid rgba(46,207,207,0.15);z-index:99;';
+    links.style.cssText = 'display:flex;flex-direction:column;position:fixed;top:' + navBottom + 'px;left:0;width:549px;height:261px;background:rgba(8,8,8,0.1);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:1.5rem 2rem;gap:1.2rem;border-bottom:1px solid rgba(46,207,207,0.15);z-index:99;';
     links.setAttribute('data-open', 'true');
   }
 }
