@@ -11,17 +11,21 @@ function toggleAccordion(btn) {
 }
 
 // Nav — fully transparent at top, very lightly tinted as you scroll
+// (on mobile the hamburger needs to stay readable, so it keeps its
+// blurred/tinted background at all scroll positions, not just on scroll)
 var nav = document.querySelector('nav');
 function updateNav() {
   var scrollY = window.scrollY;
-  if (scrollY < 10) {
+  var isMobile = window.innerWidth <= 768;
+  if (scrollY < 10 && !isMobile) {
     nav.style.background = 'transparent';
     nav.style.borderBottomColor = 'transparent';
     nav.style.backdropFilter = 'none';
     nav.style.webkitBackdropFilter = 'none';
   } else {
-    // opacity scales from 0.0 at top to max 0.12 after 300px scroll
+    // opacity scales from 0.0 (0.08 floor on mobile) at top to max 0.12 after 300px scroll
     var opacity = Math.min(scrollY / 300 * 0.12, 0.12);
+    if (isMobile) opacity = Math.max(opacity, 0.08);
     nav.style.background = 'rgba(8,8,8,' + opacity + ')';
     nav.style.borderBottomColor = 'rgba(255,255,255,' + (opacity * 0.2) + ')';
     nav.style.backdropFilter = 'blur(6px)';
@@ -29,6 +33,7 @@ function updateNav() {
   }
 }
 window.addEventListener('scroll', updateNav, { passive: true });
+window.addEventListener('resize', updateNav);
 updateNav();
 // TICKER — auto-scroll + drag (mouse) + touch swipe
 var ticker = document.getElementById('teamTicker');
@@ -148,7 +153,8 @@ function toggleMenu() {
     links.removeAttribute('style');
     links.setAttribute('data-open', 'false');
   } else {
-    links.style.cssText = 'display:flex;flex-direction:column;position:fixed;top:68px;left:0;right:0;background:rgba(8,8,8,0.15);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:2rem;gap:1.5rem;border-bottom:1px solid rgba(46,207,207,0.15);z-index:99;';
+    // same tint/blur as the rover page's working dropdown
+    links.style.cssText = 'display:flex;flex-direction:column;position:fixed;top:68px;left:0;right:0;background:rgba(8,8,8,0.1);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:2rem;gap:1.5rem;border-bottom:1px solid rgba(46,207,207,0.15);z-index:99;';
     links.setAttribute('data-open', 'true');
   }
 }
