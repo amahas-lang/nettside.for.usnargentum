@@ -152,8 +152,16 @@ function toggleMenu() {
   if (isOpen) {
     links.removeAttribute('style');
     links.setAttribute('data-open', 'false');
+    // move it back inside nav, before the hamburger, restoring desktop layout
+    var hamburger = nav.querySelector('.hamburger');
+    nav.insertBefore(links, hamburger);
   } else {
-    // same tint/blur as the rover page's working dropdown
+    // nav has its own backdrop-filter on mobile, which makes it a containing
+    // block for fixed descendants -- that traps this panel's blur to nav's
+    // own 68px strip instead of the real page behind it. Move it out to
+    // <body> so its blur samples the actual page, same as the rover page's
+    // (whose nav never gets a backdrop-filter, so it never had this problem).
+    document.body.appendChild(links);
     links.style.cssText = 'display:flex;flex-direction:column;position:fixed;top:68px;left:0;right:0;background:rgba(8,8,8,0.1);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:2rem;gap:1.5rem;border-bottom:1px solid rgba(46,207,207,0.15);z-index:99;';
     links.setAttribute('data-open', 'true');
   }
@@ -168,6 +176,7 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a) {
       var links = document.querySelector('.nav-links');
       links.removeAttribute('style');
       links.setAttribute('data-open', 'false');
+      nav.insertBefore(links, nav.querySelector('.hamburger'));
       target.scrollIntoView({ behavior: 'smooth' });
     }
   });
