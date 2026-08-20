@@ -278,11 +278,9 @@ function toggleMenu() {
     links.removeAttribute('style');
     links.setAttribute('data-open', 'false');
   } else {
-    // same placement as the other pages: nav is position:fixed full-width,
-    // and this panel is anchored top:100% off it (nav is itself a positioned
-    // element now, so this is flush against it by construction, no gap),
-    // full width and auto height like the reference markup
-    links.style.cssText = 'display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:rgba(8,8,8,0.1);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:1.5rem 2rem;gap:1.2rem;border-bottom:1px solid rgba(46,207,207,0.15);z-index:99;';
+    // DIAGNOSTIC: shifted 20px up from top:100% on purpose, to confirm this
+    // is the live element actually being edited before chasing the gap further
+    links.style.cssText = 'display:flex;flex-direction:column;position:absolute;top:calc(100% - 20px);left:0;right:0;background:rgba(8,8,8,0.1);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:1.5rem 2rem;gap:1.2rem;border-bottom:1px solid rgba(46,207,207,0.15);z-index:99;';
     links.setAttribute('data-open', 'true');
   }
 }
