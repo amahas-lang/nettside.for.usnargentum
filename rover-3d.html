@@ -627,6 +627,18 @@ function init() {
       velPhi   =  (dy / dt) * 10;
       applyCamera();
     }
+
+    // Keep every active touch's cached position fresh, not just the one
+    // used above. Without this, a finger held through a 2/3-finger pinch
+    // or pan never gets its {x,y} updated -- so if fingers lift one at a
+    // time and it briefly drops to 1 finger, the rotate calc measures dx/dy
+    // against a stale position from before the gesture, producing a huge
+    // spurious velocity that shows up as a "flip" right as the last finger
+    // releases.
+    for (var ti = 0; ti < e.touches.length; ti++) {
+      var ct = e.touches[ti];
+      touches[ct.identifier] = {x: ct.clientX, y: ct.clientY};
+    }
   }, {passive: false});
 
   canvas.addEventListener('touchend', function(e) {
