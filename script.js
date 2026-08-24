@@ -188,6 +188,9 @@ function toggleMenu() {
       popup.querySelector('.hiring-popup-close').addEventListener('click', function() {
         popup.remove();
       });
+      window.addEventListener('scroll', function() {
+        popup.remove();
+      }, { once: true, passive: true });
     }, 1200);
   });
 })();
