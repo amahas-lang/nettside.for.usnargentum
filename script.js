@@ -167,12 +167,12 @@ function toggleMenu() {
   }
 }
 
-// "We are hiring" popup (mobile only, once per browser session, skipped on the Join Us page itself)
+// "We are hiring" popup (mobile only, home page only, shows on every load)
 (function() {
   if (window.innerWidth > 768) return;
-  if (/join-us\.html/.test(location.pathname)) return;
-  if (sessionStorage.getItem('hiringPopupSeen')) return;
-  sessionStorage.setItem('hiringPopupSeen', 'true');
+  var path = location.pathname;
+  var isHome = path === '/' || /(^|\/)index\.html$/.test(path);
+  if (!isHome) return;
 
   window.addEventListener('load', function() {
     setTimeout(function() {
