@@ -505,12 +505,12 @@ footer { background:#0b0c11; padding:0.5rem 0.5rem; margin-top:auto; }
 }
 .hiring-popup-link { flex:1; text-decoration:none; display:block; }
 .hiring-popup-title {
-    display:block; font-family:var(--header-font),sans-serif;
-    font-weight:800; font-size:1rem; color:#fff; letter-spacing:0.02em;
+    display:block; font-family:'Abril Fatface',serif;
+    font-weight:400; font-size:1.05rem; color:#fff; letter-spacing:0.01em;
 }
 .hiring-popup-cta {
-    display:block; margin-top:0.25rem; color:var(--accent);
-    font-size:0.78rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
+    display:block; margin-top:0.3rem; font-family:'Abril Fatface',serif; color:var(--accent);
+    font-size:0.8rem; font-weight:400; letter-spacing:0.03em; text-transform:uppercase;
 }
 .hiring-popup-close {
     background:none; border:none; color:var(--muted);
