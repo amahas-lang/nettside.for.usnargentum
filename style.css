@@ -492,7 +492,8 @@ footer { background:#0b0c11; padding:0.5rem 0.5rem; margin-top:auto; }
 .hiring-popup {
     position:fixed; left:0; bottom:1rem; z-index:9999;
     max-width:260px;
-    background:rgba(13,13,13,0.97); border:1px solid var(--border); border-left:none;
+    background:rgba(8,8,8,0.1); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+    border:1px solid var(--border); border-left:none;
     border-radius:0 14px 14px 0; padding:0.9rem 1rem;
     box-shadow:0 8px 28px rgba(0,0,0,0.5);
     display:flex; align-items:flex-start; gap:0.5rem;
