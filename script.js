@@ -185,12 +185,15 @@ function toggleMenu() {
         '</a>' +
         '<button class="hiring-popup-close" aria-label="Close" type="button">&times;</button>';
       document.body.appendChild(popup);
+      var dismissed = false;
       popup.querySelector('.hiring-popup-close').addEventListener('click', function() {
+        dismissed = true;
         popup.remove();
       });
       window.addEventListener('scroll', function() {
-        popup.remove();
-      }, { once: true, passive: true });
+        if (dismissed) return;
+        popup.classList.toggle('hiring-popup-hidden', window.scrollY > 10);
+      }, { passive: true });
     }, 1200);
   });
 })();
