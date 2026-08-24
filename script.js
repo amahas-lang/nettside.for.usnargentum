@@ -167,6 +167,31 @@ function toggleMenu() {
   }
 }
 
+// "We are hiring" popup (mobile only, once per browser session, skipped on the Join Us page itself)
+(function() {
+  if (window.innerWidth > 768) return;
+  if (/join-us\.html/.test(location.pathname)) return;
+  if (sessionStorage.getItem('hiringPopupSeen')) return;
+  sessionStorage.setItem('hiringPopupSeen', 'true');
+
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      var popup = document.createElement('div');
+      popup.className = 'hiring-popup';
+      popup.innerHTML =
+        '<a href="join-us.html" class="hiring-popup-link">' +
+          '<span class="hiring-popup-title">We are hiring</span>' +
+          '<span class="hiring-popup-cta">Click here</span>' +
+        '</a>' +
+        '<button class="hiring-popup-close" aria-label="Close" type="button">&times;</button>';
+      document.body.appendChild(popup);
+      popup.querySelector('.hiring-popup-close').addEventListener('click', function() {
+        popup.remove();
+      });
+    }, 1200);
+  });
+})();
+
 // Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(function(a) {
   a.addEventListener('click', function(e) {
