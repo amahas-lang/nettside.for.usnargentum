@@ -181,7 +181,9 @@
       .canvas-hint { display:none; }
       .mobile-hint {
         position:absolute; top:1rem; right:1rem; z-index:5;
-        background:rgba(8,8,8,0.82); border:1px solid var(--border);
+        background:rgba(8,8,8,0.1);
+        backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+        border:1px solid var(--border);
         padding:0.35rem 0.75rem; border-radius:20px;
         font-size:0.7rem; color:#ffffff; pointer-events:none;
       }
