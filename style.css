@@ -498,10 +498,13 @@ footer { background:#0b0c11; padding:0.5rem 0.5rem; margin-top:auto; }
     box-shadow:0 8px 28px rgba(0,0,0,0.5);
     display:flex; align-items:flex-start; gap:0.5rem;
     animation:hiringPopupIn 4s ease 0.2s backwards;
-    transition:opacity 0.25s ease, transform 0.25s ease;
+    /* governs reappearing after a scroll-triggered dismissal (hidden -> visible) */
+    transition:opacity 4s ease, transform 4s ease;
 }
 .hiring-popup.hiring-popup-hidden {
     opacity:0; transform:translateX(-16px); pointer-events:none;
+    /* dismiss stays instant; only the reappear should match the slow entrance speed */
+    transition:opacity 0.25s ease, transform 0.25s ease;
 }
 @keyframes hiringPopupIn {
     from { opacity:0; transform:translateX(-16px); }
