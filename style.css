@@ -497,7 +497,7 @@ footer { background:#0b0c11; padding:0.5rem 0.5rem; margin-top:auto; }
     border-radius:0 14px 14px 0; padding:0.9rem 1rem;
     box-shadow:0 8px 28px rgba(0,0,0,0.5);
     display:flex; align-items:flex-start; gap:0.5rem;
-    animation:hiringPopupIn 0.4s cubic-bezier(0.22,1,0.36,1);
+    animation:hiringPopupIn 4s ease 0.2s backwards;
     transition:opacity 0.25s ease, transform 0.25s ease;
 }
 .hiring-popup.hiring-popup-hidden {
