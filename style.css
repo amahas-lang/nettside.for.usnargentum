@@ -289,11 +289,12 @@ section { padding:6rem 2.5rem; }
 }
 .team-card-role-badge {
     position:absolute; top:0.75rem; left:0.75rem;
-    background:rgba(10,10,10,0.82);
+    background:rgba(8,8,8,0.1);
     color:var(--text); font-size:0.62rem; font-weight:700;
     letter-spacing:0.1em; text-transform:uppercase;
     padding:0.3rem 0.7rem; border-radius:20px;
-    backdrop-filter:blur(6px);
+    border:1px solid var(--border);
+    backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
 }
 .team-card h4 {
     font-family:var(--header-font),sans-serif; font-size:1.1rem;
