@@ -292,6 +292,16 @@ function toggleMenu() {
   }
 }
 
+// Close the dropdown when the user taps/clicks anywhere outside of it
+// (but not on the hamburger itself, which already toggles it).
+document.addEventListener('click', function(e) {
+  var links = document.querySelector('.nav-links');
+  if (!links || links.getAttribute('data-open') !== 'true') return;
+  var hamburger = document.querySelector('.hamburger');
+  if (links.contains(e.target) || (hamburger && hamburger.contains(e.target))) return;
+  toggleMenu();
+});
+
 // ─── MATERIAL FACTORY (always returns a new instance) ───
 function newMat(col, rough, metal, emissive) {
   return new THREE.MeshStandardMaterial({

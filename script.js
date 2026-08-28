@@ -167,6 +167,16 @@ function toggleMenu() {
   }
 }
 
+// Close the dropdown when the user taps/clicks anywhere outside of it
+// (but not on the hamburger itself, which already toggles it).
+document.addEventListener('click', function(e) {
+  var links = document.querySelector('.nav-links');
+  if (!links || links.getAttribute('data-open') !== 'true') return;
+  var hamburger = nav.querySelector('.hamburger');
+  if (links.contains(e.target) || (hamburger && hamburger.contains(e.target))) return;
+  toggleMenu();
+});
+
 // "We are hiring" popup (mobile only, home page only, shows on every load)
 (function() {
   if (window.innerWidth > 768) return;
