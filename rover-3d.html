@@ -213,7 +213,7 @@
   <div id="canvas-wrap">
     <canvas id="c"></canvas>
     <div class="canvas-hint">Drag to rotate  |  Scroll to zoom  |  Right-click to pan</div>
-    <div class="mobile-hint">1 finger rotate  |  2 fingers zoom  |  3 fingers pan</div>
+    <div class="mobile-hint">1 finger rotate  |  2 fingers zoom &amp; pan</div>
   </div>
 
   <div class="sidebar">
@@ -550,7 +550,7 @@ function init() {
     applyCamera();
   }, {passive: true});
 
-  // ── TOUCH: 1 finger rotate, 2 finger pinch-zoom, 3 finger pan, momentum ──
+  // ── TOUCH: 1 finger rotate, 2 finger pinch-zoom + pan, momentum ──
   var touches       = {};
   var lastPinchDist = null;
   var lastPanCenter = null;
@@ -578,10 +578,18 @@ function init() {
   canvas.addEventListener('touchmove', function(e) {
     e.preventDefault();
 
-    if (e.touches.length === 3) {
-      // ── THREE FINGER PAN ──
-      var cx = (e.touches[0].clientX + e.touches[1].clientX + e.touches[2].clientX) / 3;
-      var cy = (e.touches[0].clientY + e.touches[1].clientY + e.touches[2].clientY) / 3;
+    if (e.touches.length === 2) {
+      // ── TWO FINGER: PINCH ZOOM + PAN TOGETHER ──
+      var t0 = e.touches[0];
+      var t1 = e.touches[1];
+      var cx = (t0.clientX + t1.clientX) / 2;
+      var cy = (t0.clientY + t1.clientY) / 2;
+      var dist = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
+
+      if (lastPinchDist !== null) {
+        var delta = lastPinchDist - dist;
+        sph.r = Math.max(1.5, Math.min(25, sph.r + delta * 0.03));
+      }
       if (lastPanCenter !== null) {
         var pdx = cx - lastPanCenter.x;
         var pdy = cy - lastPanCenter.y;
@@ -590,22 +598,11 @@ function init() {
         right.cross(camera.up).normalize();
         tgt.addScaledVector(right, -pdx * 0.006);
         tgt.y += pdy * 0.006;
-        applyCamera();
       }
-      lastPanCenter = {x: cx, y: cy};
-      lastPinchDist = null;
-    } else if (e.touches.length === 2) {
-      // ── PINCH ZOOM ──
-      lastPanCenter = null;
-      var t0 = e.touches[0];
-      var t1 = e.touches[1];
-      var dist = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
-      if (lastPinchDist !== null) {
-        var delta = lastPinchDist - dist;
-        sph.r = Math.max(1.5, Math.min(25, sph.r + delta * 0.03));
-        applyCamera();
-      }
+      applyCamera();
+
       lastPinchDist = dist;
+      lastPanCenter = {x: cx, y: cy};
     } else if (e.touches.length === 1) {
       lastPanCenter = null;
       // ── SINGLE FINGER ROTATE ──
